@@ -22,19 +22,16 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Фикс для переполнения */
         .min-h-screen {
             min-height: 100vh;
         }
 
-        /* Glass эффект с нормальным фоном */
         .glass-effect {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(229, 231, 235, 0.5);
         }
 
-        /* Анимация уведомлений */
         .notification-dot {
             animation: pulse-dot 2s infinite;
         }
@@ -43,27 +40,10 @@
             50% { transform: scale(1.3); opacity: 0.7; }
         }
 
-        /* Ховер эффекты */
-        .hover-scale {
-            transition: transform 0.2s ease;
-        }
-        .hover-scale:hover {
-            transform: scale(1.02);
-        }
-
-        /* Активная навигация */
-        .active-nav {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Градиент для футера */
         .footer-gradient {
             background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
         }
 
-        /* Фикс для поиска */
         .search-input-wrapper {
             position: relative;
             width: 100%;
@@ -112,13 +92,11 @@
             }
         }
 
-        /* Фикс для мобильного меню */
         #mobileMenu {
             max-height: 80vh;
             overflow-y: auto;
         }
 
-        /* Адаптив для футера */
         .footer-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -135,7 +113,6 @@
             }
         }
 
-        /* Фикс для контента */
         .main-content {
             padding: 1.5rem 1rem;
         }
@@ -150,7 +127,6 @@
             }
         }
 
-        /* Кнопки */
         .btn-primary-custom {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border: none;
@@ -162,6 +138,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
         .btn-primary-custom:hover {
             transform: translateY(-2px);
@@ -180,10 +157,20 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
         .btn-outline-custom:hover {
             background: #f8fafc;
             border-color: #94a3b8;
+        }
+
+        /* Сброс Bootstrap конфликтов */
+        .container-fluid {
+            width: 100%;
+        }
+        .px-0 {
+            padding-left: 0;
+            padding-right: 0;
         }
     </style>
 
@@ -197,7 +184,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center justify-between py-3 md:py-4 gap-3">
 
-                <!-- Левая часть: Логотип + Бургер -->
+                <!-- Левая часть -->
                 <div class="flex items-center gap-3 flex-shrink-0">
                     <button id="mobileMenuToggle" class="lg:hidden text-gray-600 hover:text-indigo-600 transition-colors p-1">
                         <i class="fas fa-bars text-2xl"></i>
@@ -216,7 +203,7 @@
                     </a>
                 </div>
 
-                <!-- Поиск (центр) -->
+                <!-- Поиск -->
                 <div class="hidden md:block flex-1 max-w-xl mx-4">
                     <div class="search-input-wrapper">
                         <i class="fas fa-search search-icon"></i>
@@ -227,12 +214,10 @@
 
                 <!-- Правая часть -->
                 <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                    <!-- Поиск мобильный -->
                     <button class="md:hidden text-gray-600 hover:text-indigo-600 transition-colors p-1">
                         <i class="fas fa-search text-xl"></i>
                     </button>
 
-                    <!-- Уведомления -->
                     <div class="relative">
                         <button class="relative p-2 rounded-xl hover:bg-gray-100 transition-colors">
                             <i class="far fa-bell text-xl text-gray-600"></i>
@@ -242,10 +227,8 @@
                         </button>
                     </div>
 
-                    <!-- Разделитель -->
                     <div class="hidden sm:block w-px h-8 bg-gray-200"></div>
 
-                    <!-- Профиль -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center gap-2 group">
                             <div class="relative flex-shrink-0">
@@ -261,7 +244,6 @@
                             <i class="fas fa-chevron-down text-xs text-gray-400 hidden lg:block group-hover:text-indigo-600 transition-colors"></i>
                         </button>
 
-                        <!-- Выпадающее меню -->
                         <div x-show="open" @click.away="open = false"
                              class="absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all origin-top-right"
                              x-transition:enter="transition ease-out duration-200"
@@ -339,13 +321,12 @@
         </div>
     </main>
 
-    <!-- ========== ФУТЕР (FOOTER) ========== -->
+    <!-- ========== ФУТЕР ========== -->
     <footer class="footer-gradient text-white mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="py-8 md:py-12">
                 <div class="footer-grid">
 
-                    <!-- Колонка 1 -->
                     <div>
                         <div class="flex items-center gap-2 mb-4">
                             <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -372,7 +353,6 @@
                         </div>
                     </div>
 
-                    <!-- Колонка 2 -->
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-wider text-indigo-300 mb-4">Навигация</h3>
                         <ul class="space-y-2.5">
@@ -384,7 +364,6 @@
                         </ul>
                     </div>
 
-                    <!-- Колонка 3 -->
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-wider text-indigo-300 mb-4">Поддержка</h3>
                         <ul class="space-y-2.5">
@@ -396,7 +375,6 @@
                         </ul>
                     </div>
 
-                    <!-- Колонка 4 -->
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-wider text-indigo-300 mb-4">Контакты</h3>
                         <ul class="space-y-3">
@@ -426,7 +404,6 @@
 
                 </div>
 
-                <!-- Копирайт -->
                 <div class="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3">
                     <p class="text-sm text-gray-400 text-center md:text-left">
                         © 2026 CRMPro. Все права защищены.
@@ -448,7 +425,6 @@
 <!-- Alpine.js -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<!-- JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const toggle = document.getElementById('mobileMenuToggle');
@@ -468,6 +444,7 @@
         }
     });
 </script>
+
 @stack('scripts')
 </body>
 </html>

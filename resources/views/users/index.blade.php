@@ -4,19 +4,31 @@
 
 @push('styles')
     <style>
+        /* Карточки статистики */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
         .stat-card {
             background: white;
             border-radius: 16px;
-            padding: 20px 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid #f1f5f9;
             transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         .stat-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            border-color: #e2e8f0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
+
         .stat-icon {
             width: 48px;
             height: 48px;
@@ -25,41 +37,57 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            flex-shrink: 0;
         }
-        .table-custom {
+
+        /* Таблица */
+        .table-wrapper {
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid #f1f5f9;
         }
-        .table-custom thead {
+
+        .table-wrapper table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-wrapper thead {
             background: #f8fafc;
             border-bottom: 2px solid #f1f5f9;
         }
-        .table-custom thead th {
+
+        .table-wrapper thead th {
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #64748b;
-            padding: 14px 20px;
+            padding: 12px 16px;
+            text-align: left;
             border: none;
+            white-space: nowrap;
         }
-        .table-custom tbody td {
-            padding: 16px 20px;
+
+        .table-wrapper tbody td {
+            padding: 12px 16px;
             vertical-align: middle;
             border-bottom: 1px solid #f1f5f9;
             color: #1e293b;
             font-size: 14px;
         }
-        .table-custom tbody tr:last-child td {
+
+        .table-wrapper tbody tr:last-child td {
             border-bottom: none;
         }
-        .table-custom tbody tr:hover {
+
+        .table-wrapper tbody tr:hover {
             background: #f8fafc;
-            transition: background 0.2s;
         }
+
+        /* Аватар */
         .user-avatar {
             width: 40px;
             height: 40px;
@@ -72,25 +100,54 @@
             color: white;
             flex-shrink: 0;
         }
+
+        .avatar-colors {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .avatar-colors-2 {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .avatar-colors-3 {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        .avatar-colors-4 {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+        }
+
+        .avatar-colors-5 {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .avatar-colors-6 {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        /* Статусы */
         .status-badge {
             padding: 4px 12px;
             border-radius: 50px;
             font-size: 12px;
             font-weight: 500;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
         }
+
         .status-active {
             background: #dcfce7;
             color: #166534;
         }
-        .status-inactive {
-            background: #fee2e2;
-            color: #991b1b;
-        }
+
         .status-pending {
             background: #fef3c7;
             color: #92400e;
         }
+
+        /* Кнопки действий */
         .btn-action {
             width: 32px;
             height: 32px;
@@ -102,55 +159,44 @@
             transition: all 0.2s;
             color: #94a3b8;
             background: transparent;
+            cursor: pointer;
         }
+
         .btn-action:hover {
             background: #f1f5f9;
             color: #1e293b;
         }
+
         .btn-action-edit:hover {
             background: #eef2ff;
             color: #4f46e5;
         }
+
         .btn-action-delete:hover {
             background: #fee2e2;
             color: #dc2626;
         }
-        .filter-bar {
-            background: white;
-            border-radius: 16px;
-            padding: 16px 20px;
-            border: 1px solid #f1f5f9;
-            margin-bottom: 24px;
+
+        /* Пагинация */
+        .pagination-wrapper {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            gap: 1rem;
         }
-        .filter-bar .form-control,
-        .filter-bar .form-select {
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            font-size: 14px;
-            padding: 8px 14px;
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-        .filter-bar .form-control:focus,
-        .filter-bar .form-select:focus {
-            background: white;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        .pagination-custom {
+
+        .pagination-links {
             display: flex;
-            gap: 6px;
-            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
         }
-        .pagination-custom .page-item {
-            list-style: none;
-        }
-        .pagination-custom .page-link {
-            display: flex;
+
+        .pagination-links a,
+        .pagination-links span {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             min-width: 36px;
@@ -165,164 +211,245 @@
             background: white;
             text-decoration: none;
         }
-        .pagination-custom .page-link:hover {
+
+        .pagination-links a:hover {
             background: #f1f5f9;
             border-color: #cbd5e1;
         }
-        .pagination-custom .active .page-link {
+
+        .pagination-links .active span {
             background: #6366f1;
             border-color: #6366f1;
             color: white;
         }
-        .pagination-custom .disabled .page-link {
+
+        .pagination-links .disabled span {
             opacity: 0.5;
             pointer-events: none;
         }
-        .avatar-colors {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+        /* Фильтры */
+        .filter-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            border: 1px solid #f1f5f9;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
         }
-        .avatar-colors-2 {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+
+        .filter-bar input,
+        .filter-bar select {
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            padding: 8px 14px;
+            background: #f8fafc;
+            transition: all 0.2s;
+            min-width: 140px;
+            outline: none;
         }
-        .avatar-colors-3 {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            background: white;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
-        .avatar-colors-4 {
-            background: linear-gradient(135deg, #f59e0b, #f97316);
+
+        .filter-bar .search-wrap {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 0 12px;
+            transition: all 0.2s;
         }
-        .avatar-colors-5 {
-            background: linear-gradient(135deg, #10b981, #34d399);
+
+        .filter-bar .search-wrap:focus-within {
+            background: white;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
-        .avatar-colors-6 {
-            background: linear-gradient(135deg, #ef4444, #f87171);
+
+        .filter-bar .search-wrap input {
+            border: none;
+            background: transparent;
+            padding: 8px 8px;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .filter-bar .search-wrap input:focus {
+            box-shadow: none;
+        }
+
+        .filter-bar .search-wrap i {
+            color: #94a3b8;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-bar .search-wrap {
+                min-width: auto;
+            }
+
+            .pagination-wrapper {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
         }
     </style>
 @endpush
 
 @section('content')
-    <div class="container-fluid px-0">
+    <div class="px-0">
 
-        <!-- Заголовок страницы -->
-        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+        <!-- Заголовок -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
             <div>
-                <h1 class="h2 fw-bold text-gray-800 mb-1">
-                    <i class="fas fa-users text-indigo-500 me-2"></i>Пользователи
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
+                    <i class="fas fa-users text-indigo-500 mr-2"></i>Пользователи
                 </h1>
-                <p class="text-muted small">Управление пользователями CRM-системы</p>
+                <p class="text-gray-500 text-sm mt-0.5">Управление пользователями CRM-системы</p>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary rounded-xl px-4 py-2" style="border-color: #e2e8f0;">
-                    <i class="fas fa-download me-2"></i>Экспорт
+            <div class="flex flex-wrap gap-2">
+                <button class="btn-outline-custom text-sm" onclick="alert('📥 Экспорт данных (заглушка)')">
+                    <i class="fas fa-download"></i> Экспорт
                 </button>
-                <button class="btn btn-primary rounded-xl px-4 py-2" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none;">
-                    <i class="fas fa-user-plus me-2"></i>Добавить пользователя
-                </button>
+
+                <a href="{{ route('users.create') }}">
+                    <button class="btn-primary-custom text-sm">
+                        <i class="fas fa-user-plus"></i> Добавить
+                    </button>
+                </a>
             </div>
         </div>
 
         <!-- Статистика -->
-        <div class="row g-3 mb-4">
-            <div class="col-xl-3 col-md-6">
-                <div class="stat-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="text-muted small fw-semibold text-uppercase mb-1">Всего</p>
-                        <h3 class="fw-bold mb-0">{{ $users->total() }}</h3>
-                    </div>
-                    <div class="stat-icon" style="background: #eef2ff; color: #6366f1;">
-                        <i class="fas fa-users"></i>
-                    </div>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div>
+                    <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Всего</p>
+                    <h3 class="text-2xl font-bold">{{ $users->total() }}</h3>
+                </div>
+                <div class="stat-icon" style="background: #eef2ff; color: #6366f1;">
+                    <i class="fas fa-users"></i>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="stat-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="text-muted small fw-semibold text-uppercase mb-1">Активные</p>
-                        <h3 class="fw-bold mb-0 text-emerald-600">{{ $users->where('email_verified_at', '!=', null)->count() }}</h3>
-                    </div>
-                    <div class="stat-icon" style="background: #dcfce7; color: #059669;">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
+            <div class="stat-card">
+                <div>
+                    <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Активные</p>
+                    <h3 class="text-2xl font-bold text-emerald-600">{{ $countActiveUsers }}</h3>
+                </div>
+                <div class="stat-icon" style="background: #dcfce7; color: #059669;">
+                    <i class="fas fa-check-circle"></i>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="stat-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="text-muted small fw-semibold text-uppercase mb-1">Не подтверждены</p>
-                        <h3 class="fw-bold mb-0 text-amber-600">{{ $users->where('email_verified_at', null)->count() }}</h3>
-                    </div>
-                    <div class="stat-icon" style="background: #fef3c7; color: #d97706;">
-                        <i class="fas fa-clock"></i>
-                    </div>
+            <div class="stat-card">
+                <div>
+                    <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Не подтверждены</p>
+                    <h3 class="text-2xl font-bold text-amber-600">{{ $countDeactivatedUsers }}</h3>
+                </div>
+                <div class="stat-icon" style="background: #fef3c7; color: #d97706;">
+                    <i class="fas fa-clock"></i>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="stat-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <p class="text-muted small fw-semibold text-uppercase mb-1">Создано заявок</p>
-{{--                        <h3 class="fw-bold mb-0 text-purple-600">{{ $users->sum(fn($u) => $u->applications->count()) }}</h3>--}}
-                    </div>
-                    <div class="stat-icon" style="background: #f3e8ff; color: #7c3aed;">
-                        <i class="fas fa-file-inbox"></i>
-                    </div>
+            <div class="stat-card">
+                <div>
+                    <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Создано заявок</p>
+                    <h3 class="text-2xl font-bold text-purple-600">{{ $countApplications }}</h3>
+                </div>
+                <div class="stat-icon" style="background: #f3e8ff; color: #7c3aed;">
+                    <i class="fas fa-file-inbox"></i>
                 </div>
             </div>
         </div>
 
         <!-- Фильтры -->
         <div class="filter-bar">
-            <div class="flex-grow-1" style="min-width: 200px;">
-                <div class="input-group">
-                <span class="input-group-text bg-transparent border-0 pe-0" style="color: #94a3b8;">
-                    <i class="fas fa-search"></i>
-                </span>
-                    <input type="text" class="form-control border-0 ps-1" placeholder="Поиск по имени или email..." style="background: transparent; box-shadow: none;">
-                </div>
+            <div class="search-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Поиск по имени или email...">
             </div>
-            <select class="form-select" style="width: auto; min-width: 140px;">
+            <select>
                 <option value="">Все статусы</option>
                 <option value="active">Активные</option>
                 <option value="pending">Ожидают</option>
                 <option value="inactive">Неактивные</option>
             </select>
-            <select class="form-select" style="width: auto; min-width: 140px;">
+            <select>
                 <option value="">Сортировка</option>
                 <option value="name">По имени</option>
                 <option value="email">По email</option>
                 <option value="created">По дате</option>
             </select>
-            <button class="btn btn-primary rounded-xl px-4" style="background: #6366f1; border: none;">
-                <i class="fas fa-filter me-2"></i>Применить
+            <button class="btn-primary-custom text-sm px-4 py-2" onclick="alert('🔍 Фильтры применены (заглушка)')">
+                <i class="fas fa-filter"></i> Применить
             </button>
-            <button class="btn btn-light rounded-xl px-4 border" style="border-color: #e2e8f0;">
-                <i class="fas fa-undo me-2"></i>Сбросить
+            <button class="btn-outline-custom text-sm px-4 py-2" onclick="alert('🔄 Фильтры сброшены (заглушка)')">
+                <i class="fas fa-undo"></i> Сбросить
             </button>
         </div>
 
-        <!-- Таблица пользователей -->
-        <div class="table-custom">
-            <div class="table-responsive">
-                <table class="table mb-0">
+        <!-- Таблица -->
+        <div class="table-wrapper">
+            <div class="overflow-x-auto">
+                <table>
                     <thead>
                     <tr>
                         <th style="width: 40px;">
-                            <input type="checkbox" class="form-check-input" style="cursor: pointer;">
+                            <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                   id="selectAll">
                         </th>
                         <th>Пользователь</th>
                         <th>Email</th>
                         <th>Статус</th>
                         <th>Заявок</th>
                         <th>Дата регистрации</th>
-                        <th style="width: 120px; text-align: right;">Действия</th>
+                        <th style="text-align: right;">Действия</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse($users as $user)
+
                         <tr>
                             <td>
-                                <input type="checkbox" class="form-check-input" style="cursor: pointer;">
+                                <input type="checkbox"
+                                       class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 user-checkbox">
                             </td>
                             <td>
-                                <div class="d-flex align-items-center gap-3">
+                                <div class="flex items-center gap-3">
                                     @php
                                         $colors = ['avatar-colors', 'avatar-colors-2', 'avatar-colors-3', 'avatar-colors-4', 'avatar-colors-5', 'avatar-colors-6'];
                                         $colorClass = $colors[array_rand($colors)];
@@ -332,49 +459,53 @@
                                         {{ $initial }}
                                     </div>
                                     <div>
-                                        <div class="fw-semibold text-gray-800">{{ $user->name }}</div>
-                                        <small class="text-muted">ID: #{{ $user->id }}</small>
+                                        <div class="font-semibold text-gray-800">{{ $user->name }}</div>
+                                        <small class="text-gray-400">ID: #{{ $user->id }}</small>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fas fa-envelope text-muted small"></i>
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-envelope text-gray-400 text-xs"></i>
                                     <span>{{ $user->email }}</span>
                                 </div>
                             </td>
                             <td>
                                 @if($user->email_verified_at)
                                     <span class="status-badge status-active">
-                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>Активный
+                                        <i class="fas fa-circle" style="font-size: 6px;"></i>Активный
                                     </span>
                                 @else
                                     <span class="status-badge status-pending">
-                                        <i class="fas fa-circle me-1" style="font-size: 6px;"></i>Ожидает
+                                        <i class="fas fa-circle" style="font-size: 6px;"></i>Ожидает
                                     </span>
                                 @endif
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark rounded-pill px-3 py-2">
-                                    <i class="fas fa-file-inbox me-1 text-indigo-500"></i>
-{{--                                    {{ $user->applications->count() }}--}}
+                                <span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1.5 text-sm">
+                                    <i class="fas fa-file-inbox mr-1 text-indigo-500"></i>
+                                    {{ $user->applications->count() }}
                                 </span>
                             </td>
                             <td>
-                                <div class="d-flex flex-column">
+                                <div class="flex flex-col">
                                     <span>{{ $user->created_at->format('d.m.Y') }}</span>
-                                    <small class="text-muted">{{ $user->created_at->diffForHumans() }}</small>
+                                    <small
+                                        class="text-gray-400 text-xs">{{ $user->created_at->diffForHumans() }}</small>
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex justify-content-end gap-1">
-                                    <button class="btn-action btn-action-edit" title="Редактировать">
+                                <div class="flex justify-end gap-1">
+                                    <button class="btn-action btn-action-edit" title="Редактировать"
+                                            onclick="alert('✏️ Редактирование пользователя (заглушка)')">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn-action btn-action-delete" title="Удалить">
+                                    <button class="btn-action btn-action-delete" title="Удалить"
+                                            onclick="if(confirm('Вы уверены?')) alert('🗑️ Пользователь удален (заглушка)')">
                                         <i class="fas fa-trash"></i>
                                     </button>
-                                    <button class="btn-action" title="Подробнее">
+                                    <button class="btn-action" title="Подробнее"
+                                            onclick="alert('📋 Информация о пользователе (заглушка)')">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                 </div>
@@ -382,12 +513,13 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5">
-                                <div class="d-flex flex-column align-items-center">
-                                    <i class="fas fa-users-slash text-muted" style="font-size: 48px; opacity: 0.3;"></i>
-                                    <p class="text-muted mt-3 mb-0">Пользователи не найдены</p>
-                                    <button class="btn btn-primary mt-3 rounded-xl px-4" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none;">
-                                        <i class="fas fa-user-plus me-2"></i>Добавить первого пользователя
+                            <td colspan="7" class="text-center py-12">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-users-slash text-gray-300 text-5xl"></i>
+                                    <p class="text-gray-500 mt-3">Пользователи не найдены</p>
+                                    <button class="btn-primary-custom mt-4"
+                                            onclick="alert('➕ Добавить первого пользователя (заглушка)')">
+                                        <i class="fas fa-user-plus"></i> Добавить первого пользователя
                                     </button>
                                 </div>
                             </td>
@@ -399,72 +531,66 @@
 
             <!-- Пагинация -->
             @if($users->hasPages())
-                <div class="d-flex flex-wrap align-items-center justify-content-between px-4 py-3 border-top border-light">
-                    <div class="text-muted small mb-2 mb-md-0">
-                        Показано <strong>{{ $users->firstItem() ?? 0 }}</strong> — <strong>{{ $users->lastItem() ?? 0 }}</strong>
+                <div class="pagination-wrapper">
+                    <div class="text-gray-500 text-sm">
+                        Показано <strong>{{ $users->firstItem() ?? 0 }}</strong> —
+                        <strong>{{ $users->lastItem() ?? 0 }}</strong>
                         из <strong>{{ $users->total() }}</strong> пользователей
                     </div>
-                    <div>
-                        <ul class="pagination-custom mb-0">
-                            {{-- Previous Page Link --}}
-                            @if($users->onFirstPage())
-                                <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-left"></i></span></li>
-                            @else
-                                <li class="page-item"><a class="page-link" href="{{ $users->previousPageUrl() }}"><i class="fas fa-chevron-left"></i></a></li>
+                    <div class="pagination-links">
+                        {{-- Previous --}}
+                        @if($users->onFirstPage())
+                            <span class="disabled"><span><i class="fas fa-chevron-left"></i></span></span>
+                        @else
+                            <a href="{{ $users->previousPageUrl() }}"><i class="fas fa-chevron-left"></i></a>
+                        @endif
+
+                        {{-- Pages --}}
+                        @foreach($users->links()->elements as $element)
+                            @if(is_string($element))
+                                <span class="disabled"><span>…</span></span>
                             @endif
-
-                            {{-- Pagination Elements --}}
-                            @foreach($users->links()->elements as $element)
-                                {{-- "Three Dots" Separator --}}
-                                @if(is_string($element))
-                                    <li class="page-item disabled"><span class="page-link">…</span></li>
-                                @endif
-
-                                {{-- Array Of Links --}}
-                                @if(is_array($element))
-                                    @foreach($element as $page => $url)
-                                        @if($page == $users->currentPage())
-                                            <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
-                                        @else
-                                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            @endforeach
-
-                            {{-- Next Page Link --}}
-                            @if($users->hasMorePages())
-                                <li class="page-item"><a class="page-link" href="{{ $users->nextPageUrl() }}"><i class="fas fa-chevron-right"></i></a></li>
-                            @else
-                                <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-right"></i></span></li>
+                            @if(is_array($element))
+                                @foreach($element as $page => $url)
+                                    @if($page == $users->currentPage())
+                                        <span class="active"><span>{{ $page }}</span></span>
+                                    @else
+                                        <a href="{{ $url }}">{{ $page }}</a>
+                                    @endif
+                                @endforeach
                             @endif
-                        </ul>
+                        @endforeach
+
+                        {{-- Next --}}
+                        @if($users->hasMorePages())
+                            <a href="{{ $users->nextPageUrl() }}"><i class="fas fa-chevron-right"></i></a>
+                        @else
+                            <span class="disabled"><span><i class="fas fa-chevron-right"></i></span></span>
+                        @endif
                     </div>
                 </div>
             @endif
         </div>
 
-        <!-- Информационная панель внизу -->
-        <div class="row g-3 mt-3">
-            <div class="col-md-6">
-                <div class="bg-white rounded-4 p-4 border border-light shadow-sm">
-                    <div class="d-flex align-items-center gap-3">
-                        <div style="width: 12px; height: 12px; background: #6366f1; border-radius: 50%;"></div>
-                        <div>
-                            <h6 class="fw-semibold mb-1">Активные пользователи</h6>
-                            <p class="text-muted small mb-0">Пользователи с подтвержденным email имеют доступ ко всем функциям</p>
-                        </div>
+        <!-- Информационные панели -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+            <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                    <div>
+                        <h6 class="font-semibold text-sm">Активные пользователи</h6>
+                        <p class="text-gray-500 text-xs">Пользователи с подтвержденным email имеют доступ ко всем
+                            функциям</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="bg-white rounded-4 p-4 border border-light shadow-sm">
-                    <div class="d-flex align-items-center gap-3">
-                        <div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%;"></div>
-                        <div>
-                            <h6 class="fw-semibold mb-1">Ожидают подтверждения</h6>
-                            <p class="text-muted small mb-0">Этим пользователям еще не отправлено письмо с подтверждением</p>
-                        </div>
+            <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 bg-amber-500 rounded-full flex-shrink-0"></div>
+                    <div>
+                        <h6 class="font-semibold text-sm">Ожидают подтверждения</h6>
+                        <p class="text-gray-500 text-xs">Этим пользователям еще не отправлено письмо с
+                            подтверждением</p>
                     </div>
                 </div>
             </div>
@@ -475,34 +601,11 @@
 
 @push('scripts')
     <script>
-        // Обработка чекбоксов "Выбрать все"
-        document.querySelector('thead input[type="checkbox"]')?.addEventListener('change', function() {
-            document.querySelectorAll('tbody input[type="checkbox"]').forEach(cb => {
+        // Выбрать все
+        document.getElementById('selectAll')?.addEventListener('change', function () {
+            document.querySelectorAll('.user-checkbox').forEach(cb => {
                 cb.checked = this.checked;
             });
-        });
-
-        // Обработка действий (заглушки)
-        document.querySelectorAll('.btn-action-edit').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('✏️ Редактирование пользователя (заглушка)');
-            });
-        });
-
-        document.querySelectorAll('.btn-action-delete').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if(confirm('Вы уверены, что хотите удалить этого пользователя?')) {
-                    alert('🗑️ Пользователь удален (заглушка)');
-                }
-            });
-        });
-
-        // Кнопка "Добавить пользователя"
-        document.querySelector('.btn-primary')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('➕ Открыть форму добавления пользователя (заглушка)');
         });
     </script>
 @endpush
