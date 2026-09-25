@@ -2,52 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Application;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Psy\Readline\Hoa\Console;
+use App\Repository\User\UserRepository;
+use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    private const PER_PAGE = 10;
+    public function __construct(
+        private UserRepository $userRepository,
+        private UserService    $userService
+    ){}
 
-    public function index()
+    public function index(): View
     {
-        return view('users.index', [
-            'countActiveUsers' => User::query()
-                ->select(['users.id'])
-                ->whereNotNull('users.email_verified_at')
-                ->count(),
-            'countDeactivatedUsers' => User::query()
-                ->select(['users.id'])
-                ->whereNull('users.email_verified_at')
-                ->count(),
-            'countApplications' => Application::query()
-                ->count(),
-            'users' => User::query()
-                ->with('applications')->paginate(self::PER_PAGE)
-        ]);
+        return view('users.index', $this->userService->getUserList());
     }
 
-    public function create()
+    public function create(): View
     {
         return view('users.create');
     }
 
-    public function store(Request $request)
+    public function store(
+        UserStoreRequest $userStoreRequest
+    ): RedirectResponse
     {
-        $validated =  $request->validate([
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'name' => ['required', 'string', 'max:255'],
+        return redirect()
+            ->route(
+                'users.edit',
+                $this->userRepository->store($userStoreRequest)
+            )
+            ->with('success', 'User created successfully.');
+    }
+
+    public function edit(User $user): View
+    {
+        return view('users.edit', [
+            'user' => $user,
         ]);
+    }
 
-        $validated['password'] = Hash::make($validated['password']);
+    public function destroy(User $user): RedirectResponse
+    {
+        $this->userRepository->destroy($user);
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User destroy successfully.');
+    }
 
-        User::query()->create($validated);
-
-        return redirect()->route('users.index');
-
+    public function update(
+        UserUpdateRequest $userUpdateRequest,
+        User              $user
+    ): RedirectResponse
+    {
+        return redirect()
+            ->route(
+                'users.edit',
+                $this->userRepository->update($userUpdateRequest, $user)
+            )->with('success', 'User updated successfully.');
     }
 }

@@ -334,7 +334,20 @@
 
 @section('content')
     <div class="px-0">
-
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Успешно!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 20 20">
+                <title>Закрыть</title>
+                <path
+                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+            </svg>
+        </span>
+            </div>
+        @endif
         <!-- Заголовок -->
         <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
             <div>
@@ -496,14 +509,19 @@
                             </td>
                             <td>
                                 <div class="flex justify-end gap-1">
-                                    <button class="btn-action btn-action-edit" title="Редактировать"
-                                            onclick="alert('✏️ Редактирование пользователя (заглушка)')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn-action btn-action-delete" title="Удалить"
-                                            onclick="if(confirm('Вы уверены?')) alert('🗑️ Пользователь удален (заглушка)')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <a href="{{ route('users.edit', $user->id) }}">
+                                        <button class="btn-action btn-action-edit" title="Редактировать">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </a>
+                                    <form method="POST" action="{{ route('users.destroy', $user) }}">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" class="btn-action btn-action-delete" title="Удалить">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                     <button class="btn-action" title="Подробнее"
                                             onclick="alert('📋 Информация о пользователе (заглушка)')">
                                         <i class="fas fa-ellipsis-v"></i>

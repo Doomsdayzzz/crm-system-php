@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Создание пользователя')
+@section('title', 'Редактирование пользователя')
 
 @push('styles')
     <style>
@@ -180,6 +180,12 @@
             color: white;
             margin: 0 auto 1rem;
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            overflow: hidden;
+        }
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .password-toggle {
             position: relative;
@@ -202,6 +208,27 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+        }
+        .user-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .user-status-badge.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .user-status-badge.inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .user-status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
         }
         @media (max-width: 640px) {
             .form-row {
@@ -226,7 +253,20 @@
 
 @section('content')
     <div class="px-0">
-
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Успешно!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 20 20">
+                <title>Закрыть</title>
+                <path
+                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+            </svg>
+        </span>
+            </div>
+        @endif
         <!-- Хлебные крошки -->
         <div class="page-header">
             <div>
@@ -235,34 +275,52 @@
                     <span>/</span>
                     <a href="{{ route('users.index') }}">Пользователи</a>
                     <span>/</span>
-                    <span class="text-gray-600 font-medium">Создание</span>
+                    <span class="text-gray-600 font-medium">Редактирование</span>
                 </div>
                 <h1>
-                    <i class="fas fa-user-plus text-indigo-500 mr-2"></i>
-                    Создание пользователя
+                    <i class="fas fa-user-edit text-indigo-500 mr-2"></i>
+                    Редактирование пользователя
                 </h1>
-                <p class="text-gray-500 text-sm mt-0.5">Заполните форму для добавления нового пользователя в систему</p>
+                <p class="text-gray-500 text-sm mt-0.5">Измените данные пользователя в системе</p>
+            </div>
+            <div class="ml-auto">
+                <span class="user-status-badge {{ $user->status ?? 'active' }}">
+                    <i class="fas fa-circle text-[6px]"></i>
+                    {{ ucfirst($user->status ?? 'Активный') }}
+                </span>
             </div>
         </div>
 
         <!-- Форма -->
         <div class="form-container">
-            <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
 
                 <!-- Аватар (превью) -->
                 <div class="text-center mb-6">
                     <div class="avatar-preview" id="avatarPreview">
-                        <i class="fas fa-user"></i>
+                        @if($user->avatar)
+                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}">
+                        @else
+                            <i class="fas fa-user"></i>
+                        @endif
                     </div>
-                    <div class="flex justify-center">
+                    <div class="flex justify-center items-center gap-4">
                         <label for="avatar" class="cursor-pointer text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                             <i class="fas fa-camera mr-1"></i>
-                            Загрузить аватар
+                            Загрузить новый аватар
                         </label>
+                        @if($user->avatar)
+                            <label for="remove_avatar" class="cursor-pointer text-sm text-red-600 hover:text-red-800 font-medium">
+                                <i class="fas fa-trash-alt mr-1"></i>
+                                Удалить
+                            </label>
+                            <input type="checkbox" id="remove_avatar" name="remove_avatar" class="hidden" value="1">
+                        @endif
                         <input type="file" id="avatar" name="avatar" class="hidden" accept="image/*">
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">Рекомендуемый размер: 200x200px</p>
+                    <p class="text-xs text-gray-400 mt-1">Рекомендуемый размер: 200x200px. Оставьте пустым, чтобы сохранить текущий аватар</p>
                 </div>
 
                 <!-- Основная информация -->
@@ -275,7 +333,7 @@
                                id="name"
                                name="name"
                                class="form-control @error('name') is-invalid @enderror"
-                               value="{{ old('name') }}"
+                               value="{{ old('name', $user->name) }}"
                                placeholder="Иванов Иван Иванович"
                                required>
                         @error('name')
@@ -295,7 +353,7 @@
                                id="email"
                                name="email"
                                class="form-control @error('email') is-invalid @enderror"
-                               value="{{ old('email') }}"
+                               value="{{ old('email', $user->email) }}"
                                placeholder="user@example.com"
                                required>
                         @error('email')
@@ -312,15 +370,15 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="password" class="form-label">
-                            Пароль <span class="required">*</span>
+                            Новый пароль
+                            <span class="text-xs text-gray-400 font-normal">(оставьте пустым, чтобы не менять)</span>
                         </label>
                         <div class="password-toggle">
                             <input type="password"
                                    id="password"
                                    name="password"
                                    class="form-control @error('password') is-invalid @enderror"
-                                   placeholder="Минимум 8 символов"
-                                   required>
+                                   placeholder="Минимум 8 символов">
                             <button type="button" class="toggle-btn" onclick="togglePassword('password')">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -336,15 +394,14 @@
 
                     <div class="form-group">
                         <label for="password_confirmation" class="form-label">
-                            Подтверждение пароля <span class="required">*</span>
+                            Подтверждение нового пароля
                         </label>
                         <div class="password-toggle">
                             <input type="password"
                                    id="password_confirmation"
                                    name="password_confirmation"
                                    class="form-control"
-                                   placeholder="Повторите пароль"
-                                   required>
+                                   placeholder="Повторите пароль">
                             <button type="button" class="toggle-btn" onclick="togglePassword('password_confirmation')">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -353,20 +410,51 @@
                 </div>
 
                 <!-- Роль и статус -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="role" class="form-label">Роль <span class="required">*</span></label>
+                        <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
+                            <option value="user" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
+                                Пользователь
+                            </option>
+                            <option value="manager" {{ old('role', $user->role ?? 'user') == 'manager' ? 'selected' : '' }}>
+                                Менеджер
+                            </option>
+                            <option value="admin" {{ old('role', $user->role ?? 'user') == 'admin' ? 'selected' : '' }}>
+                                Администратор
+                            </option>
+                            <option value="superadmin" {{ old('role', $user->role ?? 'user') == 'superadmin' ? 'selected' : '' }}>
+                                Супер-администратор
+                            </option>
+                        </select>
+                        @error('role')
+                        <div class="form-error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                        <div class="form-text">Роль определяет уровень доступа к системе</div>
+                    </div>
 
                     <div class="form-group">
                         <label for="status" class="form-label">Статус</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>
+                        <select id="status" name="status" class="form-select @error('status') is-invalid @enderror">
+                            <option value="active" {{ old('status', $user->status ?? 'active') == 'active' ? 'selected' : '' }}>
                                 Активный
                             </option>
-                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
+                            <option value="inactive" {{ old('status', $user->status ?? 'active') == 'inactive' ? 'selected' : '' }}>
                                 Неактивный
                             </option>
-                            <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>
+                            <option value="pending" {{ old('status', $user->status ?? 'active') == 'pending' ? 'selected' : '' }}>
                                 Ожидает подтверждения
                             </option>
                         </select>
+                        @error('status')
+                        <div class="form-error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                        @enderror
                         <div class="form-text">Активный пользователь может входить в систему</div>
                     </div>
                 </div>
@@ -379,7 +467,7 @@
                                id="phone"
                                name="phone"
                                class="form-control @error('phone') is-invalid @enderror"
-                               value="{{ old('phone') }}"
+                               value="{{ old('phone', $user->phone) }}"
                                placeholder="+7 (999) 123-45-67">
                         @error('phone')
                         <div class="form-error">
@@ -395,7 +483,7 @@
                                id="position"
                                name="position"
                                class="form-control @error('position') is-invalid @enderror"
-                               value="{{ old('position') }}"
+                               value="{{ old('position', $user->position) }}"
                                placeholder="Менеджер по продажам">
                         @error('position')
                         <div class="form-error">
@@ -413,13 +501,27 @@
                               name="notes"
                               class="form-control @error('notes') is-invalid @enderror"
                               rows="3"
-                              placeholder="Дополнительная информация о пользователе...">{{ old('notes') }}</textarea>
+                              placeholder="Дополнительная информация о пользователе...">{{ old('notes', $user->notes) }}</textarea>
                     @error('notes')
                     <div class="form-error">
                         <i class="fas fa-exclamation-circle"></i>
                         {{ $message }}
                     </div>
                     @enderror
+                </div>
+
+                <!-- Информация о создании -->
+                <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <span class="text-gray-500">Создан:</span>
+                            <span class="font-medium text-gray-700">{{ $user->created_at ? $user->created_at->format('d.m.Y H:i') : 'Неизвестно' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Обновлён:</span>
+                            <span class="font-medium text-gray-700">{{ $user->updated_at ? $user->updated_at->format('d.m.Y H:i') : 'Неизвестно' }}</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Кнопки -->
@@ -430,7 +532,7 @@
                     </a>
                     <button type="submit" class="btn-submit">
                         <i class="fas fa-save"></i>
-                        Создать пользователя
+                        Сохранить изменения
                     </button>
                 </div>
 
@@ -438,7 +540,7 @@
         </div>
 
         <!-- Подсказки -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 max-w-[800px] mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 max-w-[800px] mx-auto">
             <div class="bg-blue-50 rounded-2xl p-4 border border-blue-100">
                 <div class="flex items-start gap-3">
                     <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
@@ -454,6 +556,15 @@
                     <div>
                         <h6 class="font-semibold text-sm text-purple-800">Безопасность</h6>
                         <p class="text-xs text-purple-600">Пароль будет зашифрован перед сохранением</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-clock text-amber-500 mt-0.5"></i>
+                    <div>
+                        <h6 class="font-semibold text-sm text-amber-800">История изменений</h6>
+                        <p class="text-xs text-amber-600">Все изменения логируются в системе</p>
                     </div>
                 </div>
             </div>
@@ -493,19 +604,34 @@
             }
         });
 
-        // Автоматическое заполнение имени из email (опционально)
-        document.getElementById('email')?.addEventListener('blur', function() {
-            const nameField = document.getElementById('name');
-            if (!nameField.value) {
-                const email = this.value;
-                if (email) {
-                    const name = email.split('@')[0]
-                        .split('.')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ');
-                    nameField.value = name;
+        // Удаление аватара
+        document.getElementById('remove_avatar')?.addEventListener('change', function(e) {
+            if (this.checked) {
+                if (confirm('Вы уверены, что хотите удалить аватар?')) {
+                    const preview = document.getElementById('avatarPreview');
+                    preview.innerHTML = `<i class="fas fa-user"></i>`;
+                } else {
+                    this.checked = false;
                 }
             }
+        });
+
+        // Подтверждение перед выходом при наличии изменений
+        let formChanged = false;
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('change', () => formChanged = true);
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (formChanged) {
+                e.preventDefault();
+                e.returnValue = 'У вас есть несохраненные изменения. Вы уверены, что хотите покинуть страницу?';
+            }
+        });
+
+        // Обработка отправки формы для сброса флага
+        document.querySelector('form')?.addEventListener('submit', function() {
+            formChanged = false;
         });
     </script>
 @endpush
