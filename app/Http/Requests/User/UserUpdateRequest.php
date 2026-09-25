@@ -16,7 +16,7 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'email' => ['required', 'string', 'email', 'min:5', 'max:255', 'unique:users,email,' . $this->route()->parameter('user')->id],
+            'email' => ['required', 'string', 'email', 'min:5', 'max:255', 'unique:users,email,' . $this->route()->parameter('user')->id], //исключаем проверку по сомому себе для валиатора, иначе не даст сохнанить форму (подробнее видео 08092026 - 01:56:14)
             'name' => ['required', 'string', 'max:255'],
         ];
     }

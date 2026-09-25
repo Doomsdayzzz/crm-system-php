@@ -139,7 +139,7 @@ return [
     |
     | The session cookie path determines the path for which the cookie will
     | be regarded as available. Typically, this will be the root path of
-    | your application, but you're free to change this when necessary.
+    | your applications, but you're free to change this when necessary.
     |
     */
 
@@ -221,7 +221,7 @@ return [
     |
     | This value controls the serialization strategy for session data, which
     | is JSON by default. Setting this to "php" allows the storage of PHP
-    | objects in the session but can make an application vulnerable to
+    | objects in the session but can make an applications vulnerable to
     | "gadget chain" serialization attacks if the APP_KEY is leaked.
     |
     | Supported: "json", "php"
