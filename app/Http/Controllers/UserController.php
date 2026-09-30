@@ -33,6 +33,8 @@ class UserController extends Controller
         UserStoreRequest $userStoreRequest
     ): RedirectResponse
     {
+//        dd($userStoreRequest);
+
         return redirect()
             ->route(
                 'users.edit',

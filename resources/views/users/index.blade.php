@@ -146,6 +146,10 @@
             background: #fef3c7;
             color: #92400e;
         }
+        .status-inactive {
+            background: #cdcdcd;
+            color: #5c5c5c;
+        }
 
         /* Кнопки действий */
         .btn-action {
@@ -484,15 +488,27 @@
                                 </div>
                             </td>
                             <td>
-                                @if($user->email_verified_at)
-                                    <span class="status-badge status-active">
+                                @switch($user->status)
+                                    @case('active')
+                                        <span class="status-badge status-active">
                                         <i class="fas fa-circle" style="font-size: 6px;"></i>Активный
                                     </span>
-                                @else
-                                    <span class="status-badge status-pending">
+                                        @break
+                                    @case('pending')
+                                        <span class="status-badge status-pending">
                                         <i class="fas fa-circle" style="font-size: 6px;"></i>Ожидает
                                     </span>
-                                @endif
+                                        @break
+                                    @case('inactive')
+                                        <span class="status-badge status-inactive">
+                                        <i class="fas fa-circle" style="font-size: 6px;"></i>Неактивный
+                                    </span>
+                                    @break
+                                    @default
+                                        <span class="status-badge status-inactive">
+                                        <i class="fas fa-circle" style="font-size: 6px;"></i>Ошибка загрузки
+                                    </span>
+                                    @endswitch
                             </td>
                             <td>
                                 <span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1.5 text-sm">

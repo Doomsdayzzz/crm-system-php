@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -16,9 +15,13 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'email' => ['required', 'string', 'email', 'min:5', 'max:255', 'unique:users,email,' . $this->route()->parameter('user')->id],
+            'email' => ['required', 'string', 'email', 'min:5', 'max:255', 'unique:users,email,'.$this->route()->parameter('user')->id],
             'name' => ['required', 'string', 'max:255'],
             'role' => ['required', 'string', 'max:255', 'in:admin,user'],
+            'status' => ['required', 'string', 'in:active,inactive,pending'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'position' => ['nullable', 'string', 'max:255'],
+            'notes' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -26,7 +29,7 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'email.unique' => 'Такая почта уже существует!',
-            'password.confirmed' => 'Пароли не совпадают!'
+            'password.confirmed' => 'Пароли не совпадают!',
         ];
     }
 }

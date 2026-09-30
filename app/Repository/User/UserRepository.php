@@ -36,6 +36,10 @@ class UserRepository implements UserRepositoryInterface
         $user->name = $userUpdateRequest->name;
         $user->email = $userUpdateRequest->email;
         $user->role = $userUpdateRequest->role;
+        $user->status = $userUpdateRequest->status;
+        $user->phone = $userUpdateRequest->phone;
+        $user->position = $userUpdateRequest->position;
+        $user->notes = $userUpdateRequest->notes;
         $user->save();
 
         return $user;
