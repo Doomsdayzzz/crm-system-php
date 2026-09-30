@@ -80,6 +80,6 @@ return $this->type === self::TYPE_NORMAL;
 If the application supports localization, put user-facing strings in language files and retrieve them with `__()`. Simple literals are reasonable for applications that intentionally do not support multiple languages.
 
 ```php
-// In a localized applications
+// In a localized application
 return back()->with('message', __('app.article_added'));
 ```

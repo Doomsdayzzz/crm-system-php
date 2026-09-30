@@ -414,18 +414,11 @@
                     <div class="form-group">
                         <label for="role" class="form-label">Роль <span class="required">*</span></label>
                         <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
-                            <option value="user" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
-                                Пользователь
-                            </option>
-                            <option value="manager" {{ old('role', $user->role ?? 'user') == 'manager' ? 'selected' : '' }}>
-                                Менеджер
-                            </option>
-                            <option value="admin" {{ old('role', $user->role ?? 'user') == 'admin' ? 'selected' : '' }}>
-                                Администратор
-                            </option>
-                            <option value="superadmin" {{ old('role', $user->role ?? 'user') == 'superadmin' ? 'selected' : '' }}>
-                                Супер-администратор
-                            </option>
+                          @foreach(\App\Enums\RoleListEnum::label() as $roleKey => $role)
+                                <option value="{{ $roleKey }}" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
+                                    {{ $role->value }}
+                                </option>
+                          @endforeach
                         </select>
                         @error('role')
                         <div class="form-error">

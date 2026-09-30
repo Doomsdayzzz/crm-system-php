@@ -352,24 +352,14 @@
                     </div>
                 </div>
 
-                <!-- Роль и статус -->
-
-                    <div class="form-group">
-                        <label for="status" class="form-label">Статус</label>
-                        <select id="status" name="status" class="form-select">
-                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>
-                                Активный
-                            </option>
-                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
-                                Неактивный
-                            </option>
-                            <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>
-                                Ожидает подтверждения
-                            </option>
-                        </select>
-                        <div class="form-text">Активный пользователь может входить в систему</div>
-                    </div>
-                </div>
+                <label for="role" class="form-label">Роль <span class="required">*</span></label>
+                <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
+                    @foreach(\App\Enums\RoleListEnum::label() as $roleKey => $role)
+                        <option value="{{ $roleKey }}" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
+                            {{ $role->value }}
+                        </option>
+                    @endforeach
+                </select>
 
                 <!-- Дополнительная информация -->
                 <div class="form-row">

@@ -229,6 +229,7 @@
 
                     <div class="hidden sm:block w-px h-8 bg-gray-200"></div>
 
+                    @auth
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center gap-2 group">
                             <div class="relative flex-shrink-0">
@@ -238,8 +239,8 @@
                                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
                             </div>
                             <div class="hidden lg:block text-left min-w-0">
-                                <p class="text-sm font-semibold text-gray-800 truncate">Алексей Иванов</p>
-                                <p class="text-xs text-gray-500">Администратор</p>
+                                <p class="text-sm font-semibold text-gray-800 truncate">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-gray-500">{{auth()->user()->roleLabel()}}</p>
                             </div>
                             <i class="fas fa-chevron-down text-xs text-gray-400 hidden lg:block group-hover:text-indigo-600 transition-colors"></i>
                         </button>
@@ -255,11 +256,20 @@
                                     <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff&size=40"
                                          alt="Avatar" class="w-12 h-12 rounded-full border-2 border-white shadow flex-shrink-0">
                                     <div class="min-w-0">
-                                        <p class="font-semibold text-gray-800 truncate">Алексей Иванов</p>
-                                        <p class="text-sm text-gray-500 truncate">alex@crmpro.com</p>
+                                        <p class="font-semibold text-gray-800 truncate">{{ auth()->user()->name }}</p>
+                                        <p class="text-sm text-gray-500 truncate">{{ auth()->user()->email }}</p>
                                     </div>
                                 </div>
                             </div>
+
+                            @if(auth()->user()->isAdmin())
+                                <div class="py-2">
+                                    <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3 hover:bg-indigo-50 transition-colors group">
+                                        <i class="fas fa-user w-6 text-indigo-500 group-hover:text-indigo-700"></i>
+                                        <span class="text-sm text-gray-700 group-hover:text-indigo-700">Пользователи</span>
+                                    </a>
+                                </div>
+                            @endif
 
                             <div class="py-2">
                                 <a href="#" class="flex items-center px-4 py-3 hover:bg-indigo-50 transition-colors group">
@@ -275,13 +285,24 @@
                                     <span class="text-sm text-gray-700 group-hover:text-indigo-700">Помощь</span>
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
-                                <a href="#" class="flex items-center px-4 py-3 hover:bg-red-50 transition-colors group">
-                                    <i class="fas fa-sign-out-alt w-6 text-red-500 group-hover:text-red-700"></i>
-                                    <span class="text-sm text-red-600 group-hover:text-red-700">Выйти</span>
-                                </a>
+                                <form method="POST" action="{{ route('logout') }}" class="contents">
+                                    @csrf
+                                    <button type="submit" class="flex items-center w-full px-4 py-3 hover:bg-red-50 transition-colors group text-left">
+                                        <i class="fas fa-sign-out-alt w-6 text-red-500 group-hover:text-red-700"></i>
+                                        <span class="text-sm text-red-600 group-hover:text-red-700">Выйти</span>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
+                    @else
+                        <a href="{{ route('login') }}">
+                            <button class="btn btn-primary" type="button">Логин</button>
+                        </a>
+                        <a href="{{ route('register') }}">
+                            <button class="btn btn-primary" type="button">Регистрация</button>
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>

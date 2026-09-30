@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,7 @@ use phpDocumentor\Reflection\Types\Integer;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Application whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Application whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Application whereUserId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 
 #[Fillable('title', 'description', 'user_id', 'status')]

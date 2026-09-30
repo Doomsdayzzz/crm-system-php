@@ -15,7 +15,9 @@ class UserController extends Controller
     public function __construct(
         private UserRepository $userRepository,
         private UserService    $userService
-    ){}
+    ){
+
+    }
 
     public function index(): View
     {
@@ -59,10 +61,9 @@ class UserController extends Controller
         User              $user
     ): RedirectResponse
     {
+        $this->userRepository->update($userUpdateRequest, $user);
         return redirect()
-            ->route(
-                'users.edit',
-                $this->userRepository->update($userUpdateRequest, $user)
-            )->with('success', 'User updated successfully.');
+            ->back()
+            ->with('success', 'User updated successfully.');
     }
 }

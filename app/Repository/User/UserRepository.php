@@ -21,6 +21,8 @@ class UserRepository implements UserRepositoryInterface
 
     public function store(UserStoreRequest $userStoreRequest): ?User
     {
+        $validated = $userStoreRequest->validated();
+
         $validated['password'] = Hash::make($userStoreRequest->password);
         return User::query()->create($validated);
     }
@@ -33,6 +35,7 @@ class UserRepository implements UserRepositoryInterface
 
         $user->name = $userUpdateRequest->name;
         $user->email = $userUpdateRequest->email;
+        $user->role = $userUpdateRequest->role;
         $user->save();
 
         return $user;

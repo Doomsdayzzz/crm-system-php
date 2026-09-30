@@ -11,8 +11,8 @@
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.17",
-        "laravel/tinker": "^3.0"
-    },
+        "laravel/tinker": "^3.0",
+        "laravel/ui": "*"    },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/boost": "^2.2",
@@ -87,6 +87,20 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./laravel-ui",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "packagist.org": false
+        }
+    ]
 }
+

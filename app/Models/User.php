@@ -10,56 +10,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-/**
- * @property int $id
- * @property string $name
- * @property string $email
- * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
- * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Application> $applications
- * @property-read int|null $applications_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read int|null $notifications_count
- * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
- * @mixin \Eloquent
- */
-#[Fillable(['name', 'email', 'password'])]
+
+
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-//    Это аннотация PHPDoc для трейта HasFactory.
-//HasFactory — это Laravel-трейт, который предоставляет метод factory(), используемый в тестировании и сидерах для создания тестовых записей.
-//Аннотация @use HasFactory<UserFactory> указывает тип параметра шаблона — UserFactory. Это означает, что при вызове User::factory() будет возвращён экземпляр UserFactory, который настроен под модель User с правильными fillable-атрибутами и fake-данными.
-//Без этой аннотации IDE (например, PhpStorm) не смогла бы корректно определить тип, возвращаемый User::factory(), и не предлагала бы автодополнение методов из UserFactory.
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+
     protected function casts(): array
     {
-//        Метод casts() определяет, в какие типы нужно преобразовывать атрибуты модели при чтении/записи из БД.
-//    Здесь два преобразования:
-//
-//'email_verified_at' => 'datetime' — строка из БД (например, 2026-09-20 12:00:00) автоматически превращается в объект Carbon (наследник DateTime), чтобы можно было вызывать .format(), .diffForHumans() и т.д.
-//    'password' => 'hashed' — самое важное. При сохранении модели Laravel автоматически хеширует значение атрибута password, если оно ещё не было захешировано. Это значит, что в коде можно писать $user->password = '12345'; $user->save(); и Laravel сам вызовет bcrypt() / argon2(). При чтении из БД значение остаётся как есть (хеш-строка).
-//    Без 'password' => 'hashed' пришлось бы вручную хешировать пароль при каждом создании/обновлении пользователя.
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
@@ -69,7 +29,27 @@ class User extends Authenticatable
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
-//        означает: у одного пользователя может быть много заявок (applications).
-//    Laravel автоматически подставит user_id из текущей записи User и найдёт все соответствующие Application. Это избавляет от необходимости писать ручные SQL-запросы
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role == 'admin';
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role == 'user';
+    }
+
+    public function roleLabel(): string
+    {
+        switch ($this->role) {
+            case 'admin':
+                return 'Администратор';
+            case 'user':
+                return 'Пользователь';
+            default:
+                return 'Оно';
+        }
     }
 }
