@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+
 /**
  * @property int $id
  * @property string $name
@@ -17,6 +20,8 @@ use Illuminate\Notifications\Notifiable;
  * @property string $phone
  * @property string $position
  * @property string $notes
+ * @property string $avatar
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
@@ -38,9 +43,10 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User Filters(Request $request)
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'email', 'password', 'role', 'status', 'phone', 'position', 'notes'])]
+#[Fillable(['name', 'email', 'password', 'role', 'status', 'phone', 'position', 'notes','avatar'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -80,4 +86,29 @@ class User extends Authenticatable
                 return 'Оно';
         }
     }
+
+    public function scopeFilters(Builder $builder, Request $request): Builder
+    {
+        if($request->status =='all'){
+            return $builder;
+        }
+
+        return $builder
+//            ->when(!is_null($request->status) && in_array($request->status, [0, 1]), function (Builder $builder) use ($request) {
+//                $builder->where('status', $request->status);
+//            })
+            ->when($request->search, function (Builder $builder) use ($request) {
+                $builder->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            })
+            ->when($request->sortBy, function (Builder $builder) use ($request) {
+                $allowedSortFields = ['name', 'email', 'created_at'];
+                $sortField = in_array($request->sortBy, $allowedSortFields) ? $request->sortBy : 'created_at';
+                $builder->orderBy($sortField, $request->sortDirection ?? 'desc');
+            })
+            ->when($request->status, function (Builder $builder) use ($request) {
+                $builder->where('status', $request->status);
+            });
+    }
+
 }

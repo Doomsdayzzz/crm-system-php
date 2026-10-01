@@ -532,6 +532,66 @@
             </form>
         </div>
 
+            <div class="min-h-screen bg-gray-50 py-8 px-4">
+                {{-- Красивый заголовок по центру --}}
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 inline-block">
+                        Заявки
+                    </h1>
+                    <div class="mt-3 flex items-center justify-center gap-2">
+                        <span class="h-1 w-12 rounded-full bg-blue-500"></span>
+                        <span class="h-1 w-3 rounded-full bg-indigo-500"></span>
+                        <span class="h-1 w-1.5 rounded-full bg-purple-500"></span>
+                    </div>
+                    <p class="mt-4 text-gray-500 text-sm md:text-base">
+                        Всего заявок: <span class="font-semibold text-gray-700">{{ $user->applications->count() }}</span>
+                    </p>
+                </div>
+
+                {{-- Сетка карточек --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                    @foreach($user->applications as $application)
+                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+                            {{-- Заголовок с индикатором статуса --}}
+                            <div class="p-6 pb-4">
+                                <div class="flex items-start justify-between gap-4 mb-3">
+                                    <h2 class="text-xl font-bold text-gray-800 leading-tight">
+                                        {{ $application->title }}
+                                    </h2>
+
+                                    @if($application->status == 1)
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 whitespace-nowrap">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                Активный
+                            </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 whitespace-nowrap">
+                                <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                                Не активный
+                            </span>
+                                    @endif
+                                </div>
+
+                                {{-- Описание --}}
+                                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                                    {{ $application->description }}
+                                </p>
+                            </div>
+
+                            {{-- Футер карточки --}}
+                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-400">
+                        ID: #{{ $application->id }}
+                    </span>
+                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                                    Подробнее →
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
         <!-- Подсказки -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 max-w-[800px] mx-auto">
             <div class="bg-blue-50 rounded-2xl p-4 border border-blue-100">
@@ -609,22 +669,22 @@
             }
         });
 
-        // Подтверждение перед выходом при наличии изменений
-        let formChanged = false;
-        document.querySelectorAll('input, select, textarea').forEach(el => {
-            el.addEventListener('change', () => formChanged = true);
-        });
-
-        window.addEventListener('beforeunload', function(e) {
-            if (formChanged) {
-                e.preventDefault();
-                e.returnValue = 'У вас есть несохраненные изменения. Вы уверены, что хотите покинуть страницу?';
-            }
-        });
-
-        // Обработка отправки формы для сброса флага
-        document.querySelector('form')?.addEventListener('submit', function() {
-            formChanged = false;
-        });
+        // // Подтверждение перед выходом при наличии изменений
+        // let formChanged = false;
+        // document.querySelectorAll('input, select, textarea').forEach(el => {
+        //     el.addEventListener('change', () => formChanged = true);
+        // });
+        //
+        // window.addEventListener('beforeunload', function(e) {
+        //     if (formChanged) {
+        //         e.preventDefault();
+        //         e.returnValue = 'У вас есть несохраненные изменения. Вы уверены, что хотите покинуть страницу?';
+        //     }
+        // });
+        //
+        // // Обработка отправки формы для сброса флага
+        // document.querySelector('form')?.addEventListener('submit', function() {
+        //     formChanged = false;
+        // });
     </script>
 @endpush

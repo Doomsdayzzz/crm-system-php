@@ -13,6 +13,7 @@ class UserUpdateRequest extends FormRequest
 
     public function rules(): array
     {
+//        dd($this->file('avatar'));
         return [
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'email' => ['required', 'string', 'email', 'min:5', 'max:255', 'unique:users,email,'.$this->route()->parameter('user')->id],
@@ -22,6 +23,8 @@ class UserUpdateRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:255'],
             'position' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
+
         ];
     }
 

@@ -29,6 +29,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function update(UserUpdateRequest $userUpdateRequest, User $user): ?User
     {
+//        dd($userUpdateRequest->file());
         if ($userUpdateRequest->password) {
             $user->password = Hash::make($userUpdateRequest->password);
         }
@@ -40,6 +41,10 @@ class UserRepository implements UserRepositoryInterface
         $user->phone = $userUpdateRequest->phone;
         $user->position = $userUpdateRequest->position;
         $user->notes = $userUpdateRequest->notes;
+        if ($userUpdateRequest->hasFile('avatar')) {
+            $user->avatar = $userUpdateRequest->file('avatar')->store('avatars', 'public');
+        }
+
         $user->save();
 
         return $user;

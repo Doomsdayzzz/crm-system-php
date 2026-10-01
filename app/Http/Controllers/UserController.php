@@ -9,6 +9,8 @@ use App\Repository\User\UserRepository;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+
 
 class UserController extends Controller
 {
@@ -19,9 +21,9 @@ class UserController extends Controller
 
     }
 
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('users.index', $this->userService->getUserList());
+        return view('users.index', $this->userService->getUserList($request));
     }
 
     public function create(): View
@@ -46,7 +48,7 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         return view('users.edit', [
-            'user' => $user,
+            'user' => $user->load('applications'),
         ]);
     }
 

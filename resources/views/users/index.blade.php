@@ -99,6 +99,13 @@
             font-size: 16px;
             color: white;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .avatar-colors {
@@ -146,6 +153,7 @@
             background: #fef3c7;
             color: #92400e;
         }
+
         .status-inactive {
             background: #cdcdcd;
             color: #5c5c5c;
@@ -413,31 +421,34 @@
             </div>
         </div>
 
-        <!-- Фильтры -->
-        <div class="filter-bar">
-            <div class="search-wrap">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Поиск по имени или email...">
+        <form action="#" method="GET">
+            <!-- Фильтры -->
+            <div class="filter-bar">
+                <div class="search-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" value="{{ request()->search }}" name="search" placeholder="Поиск по имени или email...">
+                </div>
+                <select name="status" value="{{request()->status }}">
+                    <option value="all">Все статусы</option>
+                    <option @if(request('status') == 'active') selected @endif value="active">Активные</option>
+                    <option @if(request('status') == 'inactive') selected @endif value="inactive">Неактивные</option>
+                    <option @if(request('status') == 'pending') selected @endif value="pending">Ожидающие подтверждения</option>
+
+                </select>
+                <select name="sort" value="{{ request()->sort }}">
+                    <option @if(request('sort') == 'name') selected @endif value="">Сортировка</option>
+                    <option @if(request('sort') == 'name') selected @endif value="name">По имени</option>
+                    <option @if(request('sort') == 'email') selected @endif value="email">По email</option>
+                    <option @if(request('sort') == 'created') selected @endif value="created">По дате</option>
+                </select>
+                <button class="btn-primary-custom text-sm px-4 py-2" >
+                    <i class="fas fa-filter"></i> Применить
+                </button>
+                <button class="btn-outline-custom text-sm px-4 py-2" >
+                    <a href="{{ route('users.index') }}"><i class="fas fa-undo"></i> Сбросить</a>
+                </button>
             </div>
-            <select>
-                <option value="">Все статусы</option>
-                <option value="active">Активные</option>
-                <option value="pending">Ожидают</option>
-                <option value="inactive">Неактивные</option>
-            </select>
-            <select>
-                <option value="">Сортировка</option>
-                <option value="name">По имени</option>
-                <option value="email">По email</option>
-                <option value="created">По дате</option>
-            </select>
-            <button class="btn-primary-custom text-sm px-4 py-2" onclick="alert('🔍 Фильтры применены (заглушка)')">
-                <i class="fas fa-filter"></i> Применить
-            </button>
-            <button class="btn-outline-custom text-sm px-4 py-2" onclick="alert('🔄 Фильтры сброшены (заглушка)')">
-                <i class="fas fa-undo"></i> Сбросить
-            </button>
-        </div>
+        </form>
 
         <!-- Таблица -->
         <div class="table-wrapper">
@@ -473,7 +484,12 @@
                                         $initial = strtoupper(substr($user->name, 0, 1));
                                     @endphp
                                     <div class="user-avatar {{ $colorClass }}">
-                                        {{ $initial }}
+{{--                                        {{ $initial }}--}}
+                                        @if($user->avatar)
+                                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}">
+                                        @else
+                                            <i class="fas fa-user"></i>
+                                        @endif
                                     </div>
                                     <div>
                                         <div class="font-semibold text-gray-800">{{ $user->name }}</div>
@@ -503,12 +519,12 @@
                                         <span class="status-badge status-inactive">
                                         <i class="fas fa-circle" style="font-size: 6px;"></i>Неактивный
                                     </span>
-                                    @break
+                                        @break
                                     @default
                                         <span class="status-badge status-inactive">
                                         <i class="fas fa-circle" style="font-size: 6px;"></i>Ошибка загрузки
                                     </span>
-                                    @endswitch
+                                @endswitch
                             </td>
                             <td>
                                 <span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1.5 text-sm">
@@ -518,9 +534,9 @@
                             </td>
                             <td>
                                 <div class="flex flex-col">
-                                    <span>{{ $user->created_at->format('d.m.Y') }}</span>
+                                    <span>{{ $user->created_at?->format('d.m.Y') }}</span>
                                     <small
-                                        class="text-gray-400 text-xs">{{ $user->created_at->diffForHumans() }}</small>
+                                        class="text-gray-400 text-xs">{{ $user->created_at?->diffForHumans() }}</small>
                                 </div>
                             </td>
                             <td>
