@@ -13,6 +13,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 /**
  * @property int $id
@@ -35,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $images_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContactType> $contactTypes
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
@@ -119,5 +122,12 @@ class User extends Authenticatable
                 $builder->where('status', $request->status);
             });
     }
+
+
+    public function contactTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(ContactType::class)->withPivot('subject');
+    }
+
 
 }

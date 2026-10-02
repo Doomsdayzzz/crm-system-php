@@ -265,6 +265,88 @@
             color: #92400e;
         }
 
+
+        .contact-type-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem;
+            background: #eef2ff;
+            border: 1px solid #e0e7ff;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .contact-type-row:hover {
+            background: #e0e7ff;
+        }
+
+        .contact-type-row .icon-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #6366f1;
+            color: white;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .btn-remove-row {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-remove-row:hover {
+            background: #dc2626;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .btn-add-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #34d399, #10b981);
+            color: white;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-add-row:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-add-row:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .contact-type-row {
+            flex-wrap: wrap;
+        }
+
+
         @media (max-width: 640px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -303,6 +385,7 @@
             border: 1px solid #f1f5f9;
             transition: all 0.3s ease;
         }
+
         .image-card .private-image {
             background: white;
             border-radius: 12px;
@@ -311,6 +394,7 @@
             transition: all 0.3s ease;
             margin: 43px 0;
         }
+
         .image-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
@@ -424,14 +508,14 @@
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                 <strong class="font-bold">Успешно!</strong>
                 <span class="block sm:inline">{{ session('success') }}</span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                 viewBox="0 0 20 20">
-                <title>Закрыть</title>
-                <path
-                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
-            </svg>
-        </span>
+{{--                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">--}}
+{{--            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"--}}
+{{--                 viewBox="0 0 20 20">--}}
+{{--                <title>Закрыть</title>--}}
+{{--                <path--}}
+{{--                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>--}}
+{{--            </svg>--}}
+{{--        </span>--}}
             </div>
         @endif
         <!-- Хлебные крошки -->
@@ -586,7 +670,7 @@
                         <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
                             @foreach(\App\Enums\RoleListEnum::label() as $roleKey => $role)
                                 <option
-                                    value="{{ $roleKey }}" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
+                                    value="{{ $roleKey }}" {{ old('role', $user->role ?? 'user') == $roleKey ? 'selected' : '' }}>
                                     {{ $role->value }}
                                 </option>
                             @endforeach
@@ -661,6 +745,70 @@
                     </div>
                 </div>
 
+
+                <!-- Типы контактов (many-to-many) -->
+                <div class="form-group">
+                    <label class="form-label">Типы контактов</label>
+
+                    <div id="contactTypesList">
+                        @foreach($user->contactTypes as $index => $contactType)
+                            @continue(!$contactType)
+                            <div class="contact-type-row" data-index="{{ $index }}">
+                                <span class="icon-badge">
+                                    <i class="fas fa-tag"></i>
+                                </span>
+
+                                <select name="contact_types[{{ $index }}][id]"
+                                        class="form-select flex-1"
+                                        required>
+                                    <option value="">— Тип —</option>
+                                    @foreach($contactTypes as $type)
+                                        <option value="{{ $type->id }}" @selected($type->id == $contactType->id)>
+                                            {{ mb_ucfirst(mb_strtolower($type->type)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <input type="text"
+                                       name="contact_types[{{ $index }}][value]"
+                                       class="form-control flex-1"
+                                       value="{{ $contactType->pivot->subject ?? '' }}"
+                                       placeholder="Номер / ссылка / значение">
+
+                                <button type="button"
+                                        class="btn-remove-row js-remove-contact-type"
+                                        title="Удалить">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    @error('contact_types')
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ $message }}
+                    </div>
+                    @enderror
+                    @foreach($errors->get('contact_types.*.id') as $msgs)
+                        @foreach($msgs as $msg)
+                            <div class="form-error"><i class="fas fa-exclamation-circle"></i> {{ $msg }}</div>
+                        @endforeach
+                    @endforeach
+
+                    <button type="button" id="addContactTypeBtn" class="btn-add-row">
+                        <i class="fas fa-plus"></i>
+                        Добавить тип контакта
+                    </button>
+
+                    <div class="form-text">
+                        Нажмите <i class="fas fa-plus text-emerald-500"></i> чтобы добавить,
+                        <i class="fas fa-minus text-red-500"></i> — чтобы удалить.
+                        Изменения сохранятся вместе с формой.
+                    </div>
+                </div>
+
+
                 <!-- Комментарий -->
                 <div class="form-group">
                     <label for="notes" class="form-label">Комментарий</label>
@@ -700,7 +848,8 @@
                             @foreach($user->images as $image)
                                 <div class="image-card">
                                     @if($image->disk === 'private')
-                                        <img src="{{ asset('storage/' . '/images/private.webp') }}" alt="private" class="private-image">
+                                        <img src="{{ asset('storage/' . '/images/private.webp') }}" alt="private"
+                                             class="private-image">
                                     @elseif($image->disk === 'public')
                                         <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $image->name }}">
                                     @endif
@@ -866,6 +1015,35 @@
         </div>
 
     </div>
+
+    {{-- Шаблон строки типа контакта для JS --}}
+    <template id="contactTypeRowTemplate">
+        <div class="contact-type-row">
+            <span class="icon-badge">
+                <i class="fas fa-tag"></i>
+            </span>
+
+            <select class="form-select flex-1" required>
+                <option value="">— Тип —</option>
+                @foreach($contactTypes as $type)
+                    <option value="{{ $type->id }}">
+                        {{ mb_ucfirst(mb_strtolower($type->type)) }}
+                    </option>
+                @endforeach
+            </select>
+
+            <input type="text"
+                   class="form-control flex-1"
+                   placeholder="Номер / ссылка / значение">
+
+            <button type="button"
+                    class="btn-remove-row js-remove-contact-type"
+                    title="Удалить">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </template>
+
 @endsection
 
 @push('scripts')
@@ -963,5 +1141,47 @@
                 }
             });
         }
+
+        // === Типы контактов (many-to-many) ===
+        (function () {
+            const list   = document.getElementById('contactTypesList');
+            const tpl    = document.getElementById('contactTypeRowTemplate');
+            const addBtn = document.getElementById('addContactTypeBtn');
+
+            function reindex() {
+                [...list.querySelectorAll('.contact-type-row')].forEach((row, i) => {
+                    row.dataset.index = i;
+
+                    const select = row.querySelector('select');
+                    const input  = row.querySelector('input[type="text"]');
+
+                    select.name = `contact_types[${i}][id]`;
+                    input.name  = `contact_types[${i}][value]`;
+                });
+            }
+
+            function bindRemove(row) {
+                row.querySelector('.js-remove-contact-type')
+                    .addEventListener('click', () => {
+                        row.remove();
+                        reindex();
+                    });
+            }
+
+            // Привязка к существующим строкам
+            list.querySelectorAll('.contact-type-row').forEach(bindRemove);
+
+            // Добавление строки
+            addBtn.addEventListener('click', () => {
+                const fragment = tpl.content.cloneNode(true);
+                const row = fragment.querySelector('.contact-type-row');
+                list.appendChild(row);
+                bindRemove(row);
+                reindex();
+            });
+
+            reindex();
+        })();
+
     </script>
 @endpush

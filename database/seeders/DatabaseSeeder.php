@@ -15,11 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         User::factory(50)->create();
+        $this->call([
+            ContactTypeSeeder::class,
+        ]);
+        if (User::count() < 30) {
+            User::factory(50)->create();
+        }
 
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
+
     }
 }

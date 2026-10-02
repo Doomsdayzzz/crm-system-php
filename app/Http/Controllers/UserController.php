@@ -10,6 +10,7 @@ use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Models\ContactType;
 
 
 class UserController extends Controller
@@ -48,7 +49,8 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         return view('users.edit', [
-            'user' => $user->load(['applications', 'images']),
+            'user' => $user->load(['applications', 'images', 'contactTypes']),
+            'contactTypes' => ContactType::all()
         ]);
     }
 

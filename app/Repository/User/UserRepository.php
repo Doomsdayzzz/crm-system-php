@@ -34,6 +34,16 @@ class UserRepository implements UserRepositoryInterface
         if ($userUpdateRequest->filled('password')) {
             $user->password = Hash::make($userUpdateRequest->password);
         }
+        if ($userUpdateRequest->contact_types) {
+            $syncData = [];
+            foreach ($userUpdateRequest->contact_types as $contactType) {
+                $syncData[$contactType['id']] = [
+                    'subject' => $contactType['value'],
+                ];
+            }
+            $user->contactTypes()->sync($syncData);
+        }
+
 
         $user->name     = $userUpdateRequest->name;
         $user->email    = $userUpdateRequest->email;
