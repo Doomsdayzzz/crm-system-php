@@ -4,6 +4,7 @@ namespace App\Repository\User;
 
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 

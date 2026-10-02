@@ -48,7 +48,7 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         return view('users.edit', [
-            'user' => $user->load('applications'),
+            'user' => $user->load(['applications', 'images']),
         ]);
     }
 

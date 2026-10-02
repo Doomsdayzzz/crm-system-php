@@ -8,14 +8,16 @@
             background: white;
             border-radius: 16px;
             padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid #f1f5f9;
             max-width: 800px;
             margin: 0 auto;
         }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
+
         .form-label {
             display: block;
             font-size: 0.875rem;
@@ -23,10 +25,12 @@
             color: #1e293b;
             margin-bottom: 0.5rem;
         }
+
         .form-label .required {
             color: #ef4444;
             margin-left: 2px;
         }
+
         .form-control {
             width: 100%;
             padding: 0.625rem 1rem;
@@ -38,26 +42,32 @@
             color: #1e293b;
             outline: none;
         }
+
         .form-control:focus {
             background: white;
             border-color: #6366f1;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
+
         .form-control.is-invalid {
             border-color: #ef4444;
         }
+
         .form-control.is-invalid:focus {
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
+
         .form-control:disabled {
             background: #f1f5f9;
             cursor: not-allowed;
         }
+
         .form-text {
             font-size: 0.8rem;
             color: #94a3b8;
             margin-top: 0.375rem;
         }
+
         .form-error {
             font-size: 0.8rem;
             color: #ef4444;
@@ -66,6 +76,7 @@
             align-items: center;
             gap: 0.25rem;
         }
+
         .form-select {
             width: 100%;
             padding: 0.625rem 1rem;
@@ -82,14 +93,17 @@
             background-position: right 1rem center;
             padding-right: 2.5rem;
         }
+
         .form-select:focus {
             background-color: white;
             border-color: #6366f1;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
+
         .form-select.is-invalid {
             border-color: #ef4444;
         }
+
         .form-actions {
             display: flex;
             gap: 1rem;
@@ -98,6 +112,7 @@
             margin-top: 0.5rem;
             flex-wrap: wrap;
         }
+
         .btn-cancel {
             background: transparent;
             border: 1px solid #e2e8f0;
@@ -112,10 +127,12 @@
             gap: 0.5rem;
             text-decoration: none;
         }
+
         .btn-cancel:hover {
             background: #f8fafc;
             border-color: #94a3b8;
         }
+
         .btn-submit {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border: none;
@@ -132,15 +149,18 @@
             justify-content: center;
             min-width: 120px;
         }
+
         .btn-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
+
         .btn-submit:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
+
         .page-header {
             display: flex;
             align-items: center;
@@ -148,12 +168,14 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
+
         .page-header h1 {
             font-size: 1.5rem;
             font-weight: 700;
             color: #1e293b;
             margin: 0;
         }
+
         .page-header .breadcrumb {
             display: flex;
             align-items: center;
@@ -161,13 +183,16 @@
             font-size: 0.875rem;
             color: #94a3b8;
         }
+
         .page-header .breadcrumb a {
             color: #6366f1;
             text-decoration: none;
         }
+
         .page-header .breadcrumb a:hover {
             text-decoration: underline;
         }
+
         .avatar-preview {
             width: 80px;
             height: 80px;
@@ -182,14 +207,17 @@
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             overflow: hidden;
         }
+
         .avatar-preview img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+
         .password-toggle {
             position: relative;
         }
+
         .password-toggle .toggle-btn {
             position: absolute;
             right: 12px;
@@ -201,14 +229,17 @@
             cursor: pointer;
             padding: 4px;
         }
+
         .password-toggle .toggle-btn:hover {
             color: #6366f1;
         }
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
+
         .user-status-badge {
             display: inline-flex;
             align-items: center;
@@ -218,35 +249,171 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
+
         .user-status-badge.active {
             background: #dcfce7;
             color: #166534;
         }
+
         .user-status-badge.inactive {
             background: #fee2e2;
             color: #991b1b;
         }
+
         .user-status-badge.pending {
             background: #fef3c7;
             color: #92400e;
         }
+
         @media (max-width: 640px) {
             .form-row {
                 grid-template-columns: 1fr;
             }
+
             .form-container {
                 padding: 1rem;
             }
+
             .form-actions {
                 flex-direction: column-reverse;
             }
+
             .btn-submit {
                 width: 100%;
             }
+
             .btn-cancel {
                 width: 100%;
                 justify-content: center;
             }
+        }
+
+        /* Сетка изображений */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+        .image-card .private-image {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            margin: 43px 0;
+        }
+        .image-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .image-card .private-image img {
+            width: 100%;
+            height: 140px;
+        }
+
+        .image-card-info {
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+
+        .image-card-name {
+            font-size: 0.75rem;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .image-card-id {
+            font-size: 0.6875rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 640px) {
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Upload zone */
+        .upload-zone {
+            border: 2px dashed #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: #6366f1;
+            background: #eef2ff;
+        }
+
+        .upload-zone-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-zone-icon {
+            font-size: 2.5rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .upload-zone:hover .upload-zone-icon {
+            color: #6366f1;
+        }
+
+        .upload-zone-text {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .upload-zone-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.5rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .upload-zone-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .upload-zone-input {
+            display: none;
+        }
+
+        .upload-zone-hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
         }
     </style>
 @endpush
@@ -307,12 +474,14 @@
                         @endif
                     </div>
                     <div class="flex justify-center items-center gap-4">
-                        <label for="avatar" class="cursor-pointer text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                        <label for="avatar"
+                               class="cursor-pointer text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                             <i class="fas fa-camera mr-1"></i>
                             Загрузить новый аватар
                         </label>
                         @if($user->avatar)
-                            <label for="remove_avatar" class="cursor-pointer text-sm text-red-600 hover:text-red-800 font-medium">
+                            <label for="remove_avatar"
+                                   class="cursor-pointer text-sm text-red-600 hover:text-red-800 font-medium">
                                 <i class="fas fa-trash-alt mr-1"></i>
                                 Удалить
                             </label>
@@ -320,7 +489,8 @@
                         @endif
                         <input type="file" id="avatar" name="avatar" class="hidden" accept="image/*">
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">Рекомендуемый размер: 200x200px. Оставьте пустым, чтобы сохранить текущий аватар</p>
+                    <p class="text-xs text-gray-400 mt-1">Рекомендуемый размер: 200x200px. Оставьте пустым, чтобы
+                        сохранить текущий аватар</p>
                 </div>
 
                 <!-- Основная информация -->
@@ -414,11 +584,12 @@
                     <div class="form-group">
                         <label for="role" class="form-label">Роль <span class="required">*</span></label>
                         <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
-                          @foreach(\App\Enums\RoleListEnum::label() as $roleKey => $role)
-                                <option value="{{ $roleKey }}" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
+                            @foreach(\App\Enums\RoleListEnum::label() as $roleKey => $role)
+                                <option
+                                    value="{{ $roleKey }}" {{ old('role', $user->role ?? 'user') == 'user' ? 'selected' : '' }}>
                                     {{ $role->value }}
                                 </option>
-                          @endforeach
+                            @endforeach
                         </select>
                         @error('role')
                         <div class="form-error">
@@ -432,13 +603,16 @@
                     <div class="form-group">
                         <label for="status" class="form-label">Статус</label>
                         <select id="status" name="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="active" {{ old('status', $user->status ?? 'active') == 'active' ? 'selected' : '' }}>
+                            <option
+                                value="active" {{ old('status', $user->status ?? 'active') == 'active' ? 'selected' : '' }}>
                                 Активный
                             </option>
-                            <option value="inactive" {{ old('status', $user->status ?? 'active') == 'inactive' ? 'selected' : '' }}>
+                            <option
+                                value="inactive" {{ old('status', $user->status ?? 'active') == 'inactive' ? 'selected' : '' }}>
                                 Неактивный
                             </option>
-                            <option value="pending" {{ old('status', $user->status ?? 'active') == 'pending' ? 'selected' : '' }}>
+                            <option
+                                value="pending" {{ old('status', $user->status ?? 'active') == 'pending' ? 'selected' : '' }}>
                                 Ожидает подтверждения
                             </option>
                         </select>
@@ -503,16 +677,77 @@
                     @enderror
                 </div>
 
+                <!-- Загрузка файлов -->
+                <div class="form-group">
+                    <label class="form-label">Изображения</label>
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-zone-content">
+                            <i class="fas fa-cloud-upload-alt upload-zone-icon"></i>
+                            <p class="upload-zone-text">Перетащите изображения сюда или</p>
+                            <label for="images" class="upload-zone-btn">
+                                <i class="fas fa-folder-open"></i> Выбрать файлы
+                            </label>
+                            <input type="file" id="images" name="images[]" multiple accept="image/*"
+                                   class="upload-zone-input">
+                            <p class="upload-zone-hint">JPEG, PNG, JPG до 4MB</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Загруженные изображения</label>
+                    @if($user->images->count())
+                        <div class="image-grid">
+                            @foreach($user->images as $image)
+                                <div class="image-card">
+                                    @if($image->disk === 'private')
+                                        <img src="{{ asset('storage/' . '/images/private.webp') }}" alt="private" class="private-image">
+                                    @elseif($image->disk === 'public')
+                                        <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $image->name }}">
+                                    @endif
+                                    <div class="image-card-info">
+                                        <span class="image-card-name">{{ $image->name }}</span>
+                                        <span class="image-card-id">ID: #{{ $image->id }}</span>
+                                        <div>
+                                            <input type="checkbox"
+                                                   name="remove_images[]"
+                                                   id="remove_image_{{ $image->id }}"
+                                                   value="{{ $image->id }}"
+                                                   class="remove-image-checkbox">
+                                            <label for="remove_image_{{ $image->id }}"
+                                                   class="remove-image-text">Удалить</label>
+                                        </div>
+                                        <div>
+                                            <input type="checkbox"
+                                                   name="change_private_images[]"
+                                                   id="change_private_image_{{ $image->id }}"
+                                                   value="{{ $image->id }}"
+                                                   class="change_private_images"
+                                                {{ $image->disk === 'private' ? 'checked' : '' }}>
+
+                                            <label for="change_private_image_{{ $image->id }}"
+                                                   class="private-image-text">Приватный</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="form-text">Изображения не загружены</p>
+                    @endif
+                </div>
+
                 <!-- Информация о создании -->
                 <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
                     <div class="grid grid-cols-2 gap-3 text-sm">
                         <div>
                             <span class="text-gray-500">Создан:</span>
-                            <span class="font-medium text-gray-700">{{ $user->created_at ? $user->created_at->format('d.m.Y H:i') : 'Неизвестно' }}</span>
+                            <span
+                                class="font-medium text-gray-700">{{ $user->created_at ? $user->created_at->format('d.m.Y H:i') : 'Неизвестно' }}</span>
                         </div>
                         <div>
                             <span class="text-gray-500">Обновлён:</span>
-                            <span class="font-medium text-gray-700">{{ $user->updated_at ? $user->updated_at->format('d.m.Y H:i') : 'Неизвестно' }}</span>
+                            <span
+                                class="font-medium text-gray-700">{{ $user->updated_at ? $user->updated_at->format('d.m.Y H:i') : 'Неизвестно' }}</span>
                         </div>
                     </div>
                 </div>
@@ -531,66 +766,72 @@
 
             </form>
         </div>
+        <!-- загрузка картинок -->
 
-            <div class="min-h-screen bg-gray-50 py-8 px-4">
-                {{-- Красивый заголовок по центру --}}
-                <div class="text-center mb-8">
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 inline-block">
-                        Заявки
-                    </h1>
-                    <div class="mt-3 flex items-center justify-center gap-2">
-                        <span class="h-1 w-12 rounded-full bg-blue-500"></span>
-                        <span class="h-1 w-3 rounded-full bg-indigo-500"></span>
-                        <span class="h-1 w-1.5 rounded-full bg-purple-500"></span>
-                    </div>
-                    <p class="mt-4 text-gray-500 text-sm md:text-base">
-                        Всего заявок: <span class="font-semibold text-gray-700">{{ $user->applications->count() }}</span>
-                    </p>
+
+        <div class="min-h-screen bg-gray-50 py-8 px-4">
+            {{-- Красивый заголовок по центру --}}
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 inline-block">
+                    Заявки
+                </h1>
+                <div class="mt-3 flex items-center justify-center gap-2">
+                    <span class="h-1 w-12 rounded-full bg-blue-500"></span>
+                    <span class="h-1 w-3 rounded-full bg-indigo-500"></span>
+                    <span class="h-1 w-1.5 rounded-full bg-purple-500"></span>
                 </div>
+                <p class="mt-4 text-gray-500 text-sm md:text-base">
+                    Всего заявок: <span class="font-semibold text-gray-700">{{ $user->applications->count() }}</span>
+                </p>
+            </div>
 
-                {{-- Сетка карточек --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-                    @foreach($user->applications as $application)
-                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
-                            {{-- Заголовок с индикатором статуса --}}
-                            <div class="p-6 pb-4">
-                                <div class="flex items-start justify-between gap-4 mb-3">
-                                    <h2 class="text-xl font-bold text-gray-800 leading-tight">
-                                        {{ $application->title }}
-                                    </h2>
+            {{-- Сетка карточек --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                @foreach($user->applications as $application)
+                    <div
+                        class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+                        {{-- Заголовок с индикатором статуса --}}
+                        <div class="p-6 pb-4">
+                            <div class="flex items-start justify-between gap-4 mb-3">
+                                <h2 class="text-xl font-bold text-gray-800 leading-tight">
+                                    {{ $application->title }}
+                                </h2>
 
-                                    @if($application->status == 1)
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 whitespace-nowrap">
+                                @if($application->status == 1)
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 whitespace-nowrap">
                                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                                 Активный
                             </span>
-                                    @else
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 whitespace-nowrap">
+                                @else
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 whitespace-nowrap">
                                 <span class="w-2 h-2 rounded-full bg-gray-400"></span>
                                 Не активный
                             </span>
-                                    @endif
-                                </div>
-
-                                {{-- Описание --}}
-                                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                    {{ $application->description }}
-                                </p>
+                                @endif
                             </div>
 
-                            {{-- Футер карточки --}}
-                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                            {{-- Описание --}}
+                            <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                                {{ $application->description }}
+                            </p>
+                        </div>
+
+                        {{-- Футер карточки --}}
+                        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
                     <span class="text-xs text-gray-400">
                         ID: #{{ $application->id }}
                     </span>
-                                <button class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-                                    Подробнее →
-                                </button>
-                            </div>
+                            <button class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                                Подробнее →
+                            </button>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
+        </div>
+
 
         <!-- Подсказки -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 max-w-[800px] mx-auto">
@@ -599,7 +840,8 @@
                     <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
                     <div>
                         <h6 class="font-semibold text-sm text-blue-800">Поля обязательные</h6>
-                        <p class="text-xs text-blue-600">Поля с <span class="text-red-500">*</span> обязательны для заполнения</p>
+                        <p class="text-xs text-blue-600">Поля с <span class="text-red-500">*</span> обязательны для
+                            заполнения</p>
                     </div>
                 </div>
             </div>
@@ -645,11 +887,11 @@
         }
 
         // Превью аватара
-        document.getElementById('avatar')?.addEventListener('change', function(e) {
+        document.getElementById('avatar')?.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const preview = document.getElementById('avatarPreview');
                     preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full rounded-full object-cover">`;
                 }
@@ -658,7 +900,7 @@
         });
 
         // Удаление аватара
-        document.getElementById('remove_avatar')?.addEventListener('change', function(e) {
+        document.getElementById('remove_avatar')?.addEventListener('change', function (e) {
             if (this.checked) {
                 if (confirm('Вы уверены, что хотите удалить аватар?')) {
                     const preview = document.getElementById('avatarPreview');
@@ -686,5 +928,40 @@
         // document.querySelector('form')?.addEventListener('submit', function() {
         //     formChanged = false;
         // });
+
+        // Drag & Drop для загрузки изображений
+        const uploadZone = document.getElementById('uploadZone');
+        const imagesInput = document.getElementById('images');
+
+        if (uploadZone && imagesInput) {
+            uploadZone.addEventListener('click', (e) => {
+                if (e.target.closest('.upload-zone-btn') || e.target.closest('.upload-zone')) {
+                    imagesInput.click();
+                }
+            });
+
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                imagesInput.files = files;
+            });
+
+            imagesInput.addEventListener('change', () => {
+                if (imagesInput.files.length) {
+                    const names = Array.from(imagesInput.files).map(f => f.name).join(', ');
+                    uploadZone.querySelector('.upload-zone-text').textContent = `Выбрано: ${names}`;
+                }
+            });
+        }
     </script>
 @endpush
