@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Rules\ContactTypeValueRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -31,6 +32,7 @@ class UserUpdateRequest extends FormRequest
             'statuses' => 'sometimes|array',
             'contact_types' => ['required', 'array'],
             'contact_types.*.id' => ['integer', 'exists:contact_types,id'],
+            'contact_types.*.value' => ['string', new ContactTypeValueRule],
 
         ];
     }

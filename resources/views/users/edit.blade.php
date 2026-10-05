@@ -757,7 +757,6 @@
                                 <span class="icon-badge">
                                     <i class="fas fa-tag"></i>
                                 </span>
-
                                 <select name="contact_types[{{ $index }}][id]"
                                         class="form-select flex-1"
                                         required>
@@ -771,9 +770,16 @@
 
                                 <input type="text"
                                        name="contact_types[{{ $index }}][value]"
-                                       class="form-control flex-1"
-                                       value="{{ $contactType->pivot->subject ?? '' }}"
+                                       class="form-control flex-1 @error('contact_types.' . $index . '.value') is-invalid @enderror"
+                                       value="{{ old('contact_types.' . $index . '.value', $contactType->pivot->subject ?? '') }}"
                                        placeholder="Номер / ссылка / значение">
+
+                                @error('contact_types.' . $index . '.value')
+                                <div class="form-error" style="width: 100%; margin-top: 0.25rem;">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                                @enderror
 
                                 <button type="button"
                                         class="btn-remove-row js-remove-contact-type"
@@ -791,6 +797,12 @@
                     </div>
                     @enderror
                     @foreach($errors->get('contact_types.*.id') as $msgs)
+                        @foreach($msgs as $msg)
+                            <div class="form-error"><i class="fas fa-exclamation-circle"></i> {{ $msg }}</div>
+                        @endforeach
+                    @endforeach
+
+                    @foreach($errors->get('contact_types.*.value') as $msgs)
                         @foreach($msgs as $msg)
                             <div class="form-error"><i class="fas fa-exclamation-circle"></i> {{ $msg }}</div>
                         @endforeach
