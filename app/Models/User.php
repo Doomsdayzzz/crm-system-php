@@ -129,5 +129,13 @@ class User extends Authenticatable
         return $this->belongsToMany(ContactType::class)->withPivot('subject');
     }
 
+    public function getAvatarAttribute(): ?string
+    {
+        if ($this->attributes['avatar']) {
+            return url('storage/avatars/' . $this->attributes['avatar']);
+        }
+        return null;
+    }
+
 
 }

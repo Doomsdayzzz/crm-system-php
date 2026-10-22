@@ -54,7 +54,7 @@ class UserRepository implements UserRepositoryInterface
         $user->notes    = $userUpdateRequest->notes;
 
         if ($userUpdateRequest->hasFile('avatar')) {
-            $user->avatar = $userUpdateRequest->file('avatar')->store('avatars', 'public');
+            $user->avatar = last(explode('/', $userUpdateRequest->file('avatar')->store('avatars', 'public')));
         }
 
         if ($userUpdateRequest->hasFile('images')) {

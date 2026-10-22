@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\ContactType;
 use App\Models\User;
 use App\Repository\User\UserRepository;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Models\ContactType;
+use Illuminate\View\View;
 
 
 class UserController extends Controller
@@ -18,7 +19,8 @@ class UserController extends Controller
     public function __construct(
         private UserRepository $userRepository,
         private UserService    $userService
-    ){
+    )
+    {
 
     }
 
@@ -36,7 +38,6 @@ class UserController extends Controller
         UserStoreRequest $userStoreRequest
     ): RedirectResponse
     {
-//        dd($userStoreRequest);
 
         return redirect()
             ->route(

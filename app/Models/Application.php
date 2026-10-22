@@ -33,7 +33,7 @@ use phpDocumentor\Reflection\Types\Integer;
  * @mixin Eloquent
  */
 
-#[Fillable('title', 'description', 'user_id', 'status')]
+#[Fillable('title', 'description', 'user_id', 'status', 'department_id')]
 class Application extends Model
 {
     /** @use HasFactory<\Database\Factories\ApplicationFactory> */
