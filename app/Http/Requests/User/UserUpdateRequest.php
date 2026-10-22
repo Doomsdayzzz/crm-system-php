@@ -30,7 +30,7 @@ class UserUpdateRequest extends FormRequest
             'remove_images' => 'sometimes|array',
             'change_private_images' => 'sometimes|array',
             'statuses' => 'sometimes|array',
-            'contact_types' => ['required', 'array'],
+            'contact_types' => ['sometimes', 'array'],
             'contact_types.*.id' => ['integer', 'exists:contact_types,id'],
             'contact_types.*.value' => ['string', new ContactTypeValueRule],
 

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\File;
 
 
 /**
@@ -131,10 +132,25 @@ class User extends Authenticatable
 
     public function getAvatarAttribute(): ?string
     {
-        if ($this->attributes['avatar']) {
+        if (isset($this->attributes['avatar']) && $this->attributes['avatar']) {
             return url('storage/avatars/' . $this->attributes['avatar']);
         }
         return null;
+    }
+
+    public function removeAvatar(): bool
+    {
+        if (!$this->avatar) {
+            return false;
+        }
+        $filePath = 'storage/avatars/' . $this->attributes['avatar'];
+
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+            $this->avatar = null;
+            $this->save();
+        }
+        return true;
     }
 
 

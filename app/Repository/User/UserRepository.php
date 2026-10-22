@@ -26,7 +26,14 @@ class UserRepository implements UserRepositoryInterface
         $validated = $userStoreRequest->validated();
 
         $validated['password'] = Hash::make($userStoreRequest->password);
-        return User::query()->create($validated);
+
+        $user = User::create($validated);
+
+        if ($userStoreRequest->file('avatar')) {
+            $user->avatar = last(explode('/', $userStoreRequest->file('avatar')->store('avatars', 'public')));
+            $user->save();
+        }
+        return $user;
     }
 
     public function update(UserUpdateRequest $userUpdateRequest, User $user): ?User
