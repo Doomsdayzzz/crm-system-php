@@ -8,8 +8,12 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::resource('users', UserController::class)->except(['show']);
+Route::middleware('auth.admin')->resource('users', UserController::class)->except(['show']);
 Route::resource('applications', ApplicationController::class);
 
-Auth::routes();
+//Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+Route::prefix('auth')->group(function () {
+    Auth::routes();
+});
 

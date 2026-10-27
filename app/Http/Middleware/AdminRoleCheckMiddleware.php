@@ -10,8 +10,14 @@ class AdminRoleCheckMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->isUser()){
+        $user = auth()->user();
+        if ($user && auth()->user()->isUser()){
             abort(403);
+        }elseif (!$user){
+            if ($request->segment(1) == 'api') {
+                abort(401);
+            }
+            return redirect()->route('login');
         }
         return $next($request);
     }
