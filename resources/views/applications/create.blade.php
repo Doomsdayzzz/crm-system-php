@@ -49,10 +49,6 @@
         .form-control.is-invalid:focus {
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
-        .form-control:disabled {
-            background: #f1f5f9;
-            cursor: not-allowed;
-        }
         .form-text {
             font-size: 0.8rem;
             color: #94a3b8;
@@ -136,11 +132,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
         .page-header {
             display: flex;
             align-items: center;
@@ -168,35 +159,27 @@
         .page-header .breadcrumb a:hover {
             text-decoration: underline;
         }
-        .app-icon-preview {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: white;
-            margin: 0 auto 1rem;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
-        .char-counter {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            text-align: right;
-            margin-top: 0.25rem;
+        .pill {
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
-        .char-counter.warning {
-            color: #f59e0b;
-        }
-        .char-counter.danger {
-            color: #ef4444;
-        }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-indigo { background: #e0e7ff; color: #3730a3; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-gray { background: #f1f5f9; color: #475569; }
         @media (max-width: 640px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -225,14 +208,14 @@
         <div class="page-header">
             <div>
                 <div class="breadcrumb">
-                    <a href="#">Главная</a>
+                    <a href="/">Главная</a>
                     <span>/</span>
                     <a href="{{ route('applications.index') }}">Заявки</a>
                     <span>/</span>
                     <span class="text-gray-600 font-medium">Создание</span>
                 </div>
                 <h1>
-                    <i class="fas fa-file-circle-plus text-indigo-500 mr-2"></i>
+                    <i class="fas fa-plus-circle text-indigo-500 mr-2"></i>
                     Создание заявки
                 </h1>
                 <p class="text-gray-500 text-sm mt-0.5">Заполните форму для добавления новой заявки в систему</p>
@@ -244,26 +227,17 @@
             <form action="{{ route('applications.store') }}" method="POST">
                 @csrf
 
-                <!-- Иконка (превью) -->
-                <div class="text-center mb-6">
-                    <div class="app-icon-preview">
-                        <i class="fas fa-file-invoice"></i>
-                    </div>
-                    <p class="text-xs text-gray-400">Новая заявка будет создана со статусом «Новая»</p>
-                </div>
-
                 <!-- Название -->
                 <div class="form-group">
                     <label for="title" class="form-label">
-                        Название заявки <span class="required">*</span>
+                        Название <span class="required">*</span>
                     </label>
                     <input type="text"
                            id="title"
                            name="title"
                            class="form-control @error('title') is-invalid @enderror"
                            value="{{ old('title') }}"
-                           placeholder="Например: Не работает принтер в офисе"
-                           minlength="8"
+                           placeholder="Например: Запрос на подключение тарифа"
                            required>
                     @error('title')
                     <div class="form-error">
@@ -271,68 +245,86 @@
                         {{ $message }}
                     </div>
                     @enderror
-                    <div class="form-text">Минимум 8 символов. Название должно быть уникальным</div>
+                    <div class="form-text">Кратко опишите суть заявки (до 255 символов)</div>
+                </div>
+
+                <!-- Отдел / Ответственный -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="department_id" class="form-label">
+                            Отдел <span class="required">*</span>
+                        </label>
+                        <select id="department_id"
+                                name="department_id"
+                                class="form-select @error('department_id') is-invalid @enderror"
+                                required>
+                            <option value="">— Выберите отдел —</option>
+                            @foreach($departments as $department)
+                                <option value="{{ $department->id }}"
+                                    @selected(old('department_id') == $department->id)>
+                                    {{ $department->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('department_id')
+                        <div class="form-error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                        <div class="form-text">Отдел, который будет обрабатывать заявку</div>
+                    </div>
+
+                    <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                </div>
+
+                <!-- Статус -->
+                <div class="form-group">
+                    <label for="status" class="form-label">
+                        Статус <span class="required">*</span>
+                    </label>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <select id="status"
+                                name="status"
+                                class="form-select @error('status') is-invalid @enderror"
+                                style="flex: 1; min-width: 220px;"
+                                onchange="updateStatusPreview(this)">
+                            @foreach(\App\Enums\ApplicationStatusEnum::options() as $value => $label)
+                                <option value="{{ $value }}" data-color="{{ \App\Enums\ApplicationStatusEnum::from($value)->color() }}"
+                                        data-icon="{{ \App\Enums\ApplicationStatusEnum::from($value)->icon() }}"
+                                        @selected((int) old('status', 1) === $value)>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <span id="statusPreview" class="pill badge-blue">
+                            <i class="fas fa-inbox" style="font-size: 10px;"></i>
+                            <span>Новая</span>
+                        </span>
+                    </div>
+                    @error('status')
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
 
                 <!-- Описание -->
                 <div class="form-group">
-                    <label for="description" class="form-label">
-                        Описание <span class="required">*</span>
-                    </label>
+                    <label for="description" class="form-label">Описание</label>
                     <textarea id="description"
                               name="description"
                               class="form-control @error('description') is-invalid @enderror"
                               rows="5"
-                              maxlength="255"
-                              placeholder="Подробно опишите суть заявки..."
-                              required>{{ old('description') }}</textarea>
-                    <div class="char-counter" id="descCounter">0 / 255</div>
+                              placeholder="Подробное описание заявки, пожелания клиента, контактные данные...">{{ old('description') }}</textarea>
                     @error('description')
                     <div class="form-error">
                         <i class="fas fa-exclamation-circle"></i>
                         {{ $message }}
                     </div>
                     @enderror
-                    <div class="form-text">От 5 до 255 символов</div>
-                </div>
-
-                <!-- Статус и пользователь -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="status" class="form-label">Статус</label>
-                        <select id="status" name="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="0" {{ old('status', 0) == 0 ? 'selected' : '' }}>Новая</option>
-                            <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>В работе</option>
-                            <option value="2" {{ old('status') == 2 ? 'selected' : '' }}>Завершена</option>
-                            <option value="3" {{ old('status') == 3 ? 'selected' : '' }}>Отклонена</option>
-                        </select>
-                        @error('status')
-                        <div class="form-error">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                        @enderror
-                        <div class="form-text">Текущий статус обработки заявки</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="user_id" class="form-label">Ответственный пользователь</label>
-                        <select id="user_id" name="user_id" class="form-select @error('user_id') is-invalid @enderror">
-                            <option value="">— Не назначен —</option>
-                            @foreach($users ?? [] as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }} ({{ $user->email }})
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('user_id')
-                        <div class="form-error">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                        @enderror
-                        <div class="form-text">Пользователь, ответственный за выполнение заявки</div>
-                    </div>
+                    <div class="form-text">Необязательное поле. Максимум 5000 символов</div>
                 </div>
 
                 <!-- Кнопки -->
@@ -356,17 +348,17 @@
                 <div class="flex items-start gap-3">
                     <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
                     <div>
-                        <h6 class="font-semibold text-sm text-blue-800">Обязательные поля</h6>
+                        <h6 class="font-semibold text-sm text-blue-800">Поля обязательные</h6>
                         <p class="text-xs text-blue-600">Поля с <span class="text-red-500">*</span> обязательны для заполнения</p>
                     </div>
                 </div>
             </div>
             <div class="bg-purple-50 rounded-2xl p-4 border border-purple-100">
                 <div class="flex items-start gap-3">
-                    <i class="fas fa-list-check text-purple-500 mt-0.5"></i>
+                    <i class="fas fa-route text-purple-500 mt-0.5"></i>
                     <div>
-                        <h6 class="font-semibold text-sm text-purple-800">Уникальность</h6>
-                        <p class="text-xs text-purple-600">Название заявки должно быть уникальным в системе</p>
+                        <h6 class="font-semibold text-sm text-purple-800">Дальше</h6>
+                        <p class="text-xs text-purple-600">После создания заявку можно будет редактировать и назначать ответственного</p>
                     </div>
                 </div>
             </div>
@@ -377,24 +369,13 @@
 
 @push('scripts')
     <script>
-        // Счётчик символов для описания
-        const descField = document.getElementById('description');
-        const descCounter = document.getElementById('descCounter');
-
-        function updateCounter() {
-            if (!descField || !descCounter) return;
-            const len = descField.value.length;
-            descCounter.textContent = `${len} / 255`;
-
-            descCounter.classList.remove('warning', 'danger');
-            if (len > 230) {
-                descCounter.classList.add('danger');
-            } else if (len > 200) {
-                descCounter.classList.add('warning');
-            }
+        // Превью статуса
+        function updateStatusPreview(select) {
+            const option = select.options[select.selectedIndex];
+            const preview = document.getElementById('statusPreview');
+            preview.className = 'pill badge-' + option.dataset.color;
+            preview.innerHTML = '<i class="fas ' + option.dataset.icon + '" style="font-size: 10px;"></i><span>' + option.text.trim() + '</span>';
         }
-
-        descField?.addEventListener('input', updateCounter);
-        updateCounter();
+        updateStatusPreview(document.getElementById('status'));
     </script>
 @endpush

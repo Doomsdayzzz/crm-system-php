@@ -2,39 +2,51 @@
 
 namespace App\Http\Requests\Application;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Enums\ApplicationStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ApplicationUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-//            'title' => ['required', 'string', 'min:8', Rule::unique('applications', 'title')->ignore($this->route()->parameter('application')->title),],
-            'title' => ['required', 'string', 'min:8'],
-            'description' => ['required', 'string', 'min:5', 'max:255'],
-            'user_id'     => ['required', 'integer', 'exists:users,id'],
-            'status'      => ['nullable', 'integer', 'in:0,1,2,3'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:5000'],
+            'department_id' => ['required', 'integer', 'exists:departments,id'],
+            'user_id' => ['nullable', 'integer', 'exists:users,id'],
+            'status' => ['required', 'integer', 'in:'.implode(',', ApplicationStatusEnum::values())],
         ];
     }
+
     public function messages(): array
     {
         return [
-            'title.unique' => 'Такая заявка уже существует!'
+            'title.required' => 'Поле «Название» обязательно для заполнения.',
+            'title.max' => 'Название не должно превышать :max символов.',
+
+            'department_id.required' => 'Выберите отдел.',
+            'department_id.exists' => 'Выбранный отдел не существует.',
+
+            'user_id.exists' => 'Выбранный пользователь не существует.',
+
+            'status.required' => 'Выберите статус заявки.',
+            'status.in' => 'Статус заявки должен быть одним из: :values.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'title' => 'Название',
+            'description' => 'Описание',
+            'department_id' => 'Отдел',
+            'user_id' => 'Ответственный',
+            'status' => 'Статус',
         ];
     }
 }

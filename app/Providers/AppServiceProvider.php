@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Application;
 use App\Observers\ApplicationObserver;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Application::observe(ApplicationObserver::class);
+        Gate::policy(Application::class, ApplicationPolicy::class);
+
     }
 }

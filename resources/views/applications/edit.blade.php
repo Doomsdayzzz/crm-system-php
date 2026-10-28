@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Редактирование заявки')
+@section('title', 'Редактирование заявки #' . $application->id)
 
 @push('styles')
     <style>
@@ -48,10 +48,6 @@
         }
         .form-control.is-invalid:focus {
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-        }
-        .form-control:disabled {
-            background: #f1f5f9;
-            cursor: not-allowed;
         }
         .form-text {
             font-size: 0.8rem;
@@ -136,10 +132,22 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .btn-danger {
+            background: transparent;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-danger:hover {
+            background: #fef2f2;
+            border-color: #ef4444;
         }
         .page-header {
             display: flex;
@@ -168,58 +176,42 @@
         .page-header .breadcrumb a:hover {
             text-decoration: underline;
         }
-        .app-icon-preview {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: white;
-            margin: 0 auto 1rem;
-        }
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
-        .app-status-badge {
+        .pill {
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            gap: 6px;
+            white-space: nowrap;
         }
-        .app-status-badge.new {
-            background: #dbeafe;
-            color: #1e40af;
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-indigo { background: #e0e7ff; color: #3730a3; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-gray { background: #f1f5f9; color: #475569; }
+        .meta-card {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #475569;
         }
-        .app-status-badge.in-progress {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .app-status-badge.completed {
-            background: #dcfce7;
-            color: #166534;
-        }
-        .app-status-badge.rejected {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        .char-counter {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            text-align: right;
-            margin-top: 0.25rem;
-        }
-        .char-counter.warning {
-            color: #f59e0b;
-        }
-        .char-counter.danger {
-            color: #ef4444;
+        .meta-card i {
+            color: #6366f1;
+            width: 16px;
+            text-align: center;
         }
         @media (max-width: 640px) {
             .form-row {
@@ -231,10 +223,9 @@
             .form-actions {
                 flex-direction: column-reverse;
             }
-            .btn-submit {
-                width: 100%;
-            }
-            .btn-cancel {
+            .btn-submit,
+            .btn-cancel,
+            .btn-danger {
                 width: 100%;
                 justify-content: center;
             }
@@ -245,17 +236,9 @@
 @section('content')
     <div class="px-0">
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl relative mb-4" role="alert">
                 <strong class="font-bold">Успешно!</strong>
                 <span class="block sm:inline">{{ session('success') }}</span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                         viewBox="0 0 20 20">
-                        <title>Закрыть</title>
-                        <path
-                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
-                    </svg>
-                </span>
             </div>
         @endif
 
@@ -263,32 +246,19 @@
         <div class="page-header">
             <div>
                 <div class="breadcrumb">
-                    <a href="#">Главная</a>
+                    <a href="/">Главная</a>
                     <span>/</span>
                     <a href="{{ route('applications.index') }}">Заявки</a>
+                    <span>/</span>
+                    <a href="{{ route('applications.show', $application) }}">#{{ $application->id }}</a>
                     <span>/</span>
                     <span class="text-gray-600 font-medium">Редактирование</span>
                 </div>
                 <h1>
-                    <i class="fas fa-file-pen text-indigo-500 mr-2"></i>
-                    Редактирование заявки
+                    <i class="fas fa-edit text-indigo-500 mr-2"></i>
+                    Редактирование заявки #{{ $application->id }}
                 </h1>
-                <p class="text-gray-500 text-sm mt-0.5">Измените данные заявки в системе</p>
-            </div>
-            <div class="ml-auto">
-                @php
-                    $statusMap = [
-                        0 => ['class' => 'new', 'label' => 'Новая', 'icon' => 'fa-sparkles'],
-                        1 => ['class' => 'in-progress', 'label' => 'В работе', 'icon' => 'fa-spinner'],
-                        2 => ['class' => 'completed', 'label' => 'Завершена', 'icon' => 'fa-check-circle'],
-                        3 => ['class' => 'rejected', 'label' => 'Отклонена', 'icon' => 'fa-times-circle'],
-                    ];
-                    $status = $statusMap[$application->status] ?? $statusMap[0];
-                @endphp
-                <span class="app-status-badge {{ $status['class'] }}">
-                    <i class="fas {{ $status['icon'] }}"></i>
-                    {{ $status['label'] }}
-                </span>
+                <p class="text-gray-500 text-sm mt-0.5">{{ $application->title }}</p>
             </div>
         </div>
 
@@ -298,87 +268,64 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Иконка (превью) -->
-                <div class="text-center mb-6">
-                    <div class="app-icon-preview"
-                         style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
-                        <i class="fas fa-file-invoice"></i>
-                    </div>
-                    <p class="text-xs text-gray-400">ID заявки: #{{ $application->id }}</p>
-                </div>
-
                 <!-- Название -->
                 <div class="form-group">
                     <label for="title" class="form-label">
-                        Название заявки <span class="required">*</span>
+                        Название <span class="required">*</span>
                     </label>
                     <input type="text"
                            id="title"
                            name="title"
                            class="form-control @error('title') is-invalid @enderror"
                            value="{{ old('title', $application->title) }}"
-                           placeholder="Например: Не работает принтер в офисе"
-                           minlength="8"
-                           required
-                           readonly>
+                           placeholder="Например: Запрос на подключение тарифа"
+                           required>
                     @error('title')
                     <div class="form-error">
                         <i class="fas fa-exclamation-circle"></i>
                         {{ $message }}
                     </div>
                     @enderror
-{{--                    <div class="form-text">Минимум 8 символов. Название должно быть уникальным</div>--}}
+                    <div class="form-text">Кратко опишите суть заявки (до 255 символов)</div>
                 </div>
 
-                <!-- Описание -->
-                <div class="form-group">
-                    <label for="description" class="form-label">
-                        Описание <span class="required">*</span>
-                    </label>
-                    <textarea id="description"
-                              name="description"
-                              class="form-control @error('description') is-invalid @enderror"
-                              rows="5"
-                              maxlength="255"
-                              placeholder="Подробно опишите суть заявки..."
-                              required>{{ old('description', $application->description) }}</textarea>
-                    <div class="char-counter" id="descCounter">0 / 255</div>
-                    @error('description')
-                    <div class="form-error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        {{ $message }}
-                    </div>
-                    @enderror
-                    <div class="form-text">От 5 до 255 символов</div>
-                </div>
-
-                <!-- Статус и пользователь -->
+                <!-- Отдел / Ответственный -->
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="status" class="form-label">Статус</label>
-                        <select id="status" name="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="0" {{ old('status', $application->status) == 0 ? 'selected' : '' }}>Новая</option>
-                            <option value="1" {{ old('status', $application->status) == 1 ? 'selected' : '' }}>В работе</option>
-                            <option value="2" {{ old('status', $application->status) == 2 ? 'selected' : '' }}>Завершена</option>
-                            <option value="3" {{ old('status', $application->status) == 3 ? 'selected' : '' }}>Отклонена</option>
+                        <label for="department_id" class="form-label">
+                            Отдел <span class="required">*</span>
+                        </label>
+                        <select id="department_id"
+                                name="department_id"
+                                class="form-select @error('department_id') is-invalid @enderror"
+                                required>
+                            <option value="">— Выберите отдел —</option>
+                            @foreach($departments as $department)
+                                <option value="{{ $department->id }}"
+                                    @selected(old('department_id', $application->department_id) == $department->id)>
+                                    {{ $department->title }}
+                                </option>
+                            @endforeach
                         </select>
-                        @error('status')
+                        @error('department_id')
                         <div class="form-error">
                             <i class="fas fa-exclamation-circle"></i>
                             {{ $message }}
                         </div>
                         @enderror
-                        <div class="form-text">Текущий статус обработки заявки</div>
+                        <div class="form-text">Отдел, который будет обрабатывать заявку</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="user_id" class="form-label">Ответственный пользователь</label>
-                        <select id="user_id" name="user_id" class="form-select @error('user_id') is-invalid @enderror">
+                        <label for="user_id" class="form-label">Ответственный</label>
+                        <select id="user_id"
+                                name="user_id"
+                                class="form-select @error('user_id') is-invalid @enderror">
                             <option value="">— Не назначен —</option>
-                            @foreach($users ?? [] as $user)
+                            @foreach($users as $user)
                                 <option value="{{ $user->id }}"
-                                    {{ old('user_id', $application->user_id) == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }} ({{ $user->email }})
+                                    @selected(old('user_id', $application->user_id) == $user->id)>
+                                    {{ $user->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -388,33 +335,65 @@
                             {{ $message }}
                         </div>
                         @enderror
-                        <div class="form-text">Пользователь, ответственный за выполнение заявки</div>
+                        <div class="form-text">Можно назначить позже</div>
                     </div>
                 </div>
 
-                <!-- Информация о создании -->
-                <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div>
-                            <span class="text-gray-500">Создана:</span>
-                            <span class="font-medium text-gray-700">
-                                {{ $application->created_at ? $application->created_at->format('d.m.Y H:i') : 'Неизвестно' }}
-                            </span>
-                        </div>
-                        <div>
-                            <span class="text-gray-500">Обновлена:</span>
-                            <span class="font-medium text-gray-700">
-                                {{ $application->updated_at ? $application->updated_at->format('d.m.Y H:i') : 'Неизвестно' }}
-                            </span>
-                        </div>
+                <!-- Статус -->
+                <div class="form-group">
+                    <label for="status" class="form-label">
+                        Статус <span class="required">*</span>
+                    </label>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <select id="status"
+                                name="status"
+                                class="form-select @error('status') is-invalid @enderror"
+                                style="flex: 1; min-width: 220px;"
+                                onchange="updateStatusPreview(this)">
+                            @foreach(\App\Enums\ApplicationStatusEnum::options() as $value => $label)
+                                <option value="{{ $value }}"
+                                        data-color="{{ \App\Enums\ApplicationStatusEnum::from($value)->color() }}"
+                                        data-icon="{{ \App\Enums\ApplicationStatusEnum::from($value)->icon() }}"
+                                        @selected((int) old('status', $application->status) === $value)>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <span id="statusPreview" class="pill badge-blue">
+                            <i class="fas fa-inbox" style="font-size: 10px;"></i>
+                            <span>Новая</span>
+                        </span>
                     </div>
+                    @error('status')
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
+                <!-- Описание -->
+                <div class="form-group">
+                    <label for="description" class="form-label">Описание</label>
+                    <textarea id="description"
+                              name="description"
+                              class="form-control @error('description') is-invalid @enderror"
+                              rows="5"
+                              placeholder="Подробное описание заявки, пожелания клиента, контактные данные...">{{ old('description', $application->description) }}</textarea>
+                    @error('description')
+                    <div class="form-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ $message }}
+                    </div>
+                    @enderror
+                    <div class="form-text">Необязательное поле. Максимум 5000 символов</div>
                 </div>
 
                 <!-- Кнопки -->
                 <div class="form-actions">
-                    <a href="{{ route('applications.index') }}" class="btn-cancel">
+                    <a href="{{ route('applications.show', $application) }}" class="btn-cancel">
                         <i class="fas fa-arrow-left"></i>
-                        Отмена
+                        Назад
                     </a>
                     <button type="submit" class="btn-submit">
                         <i class="fas fa-save"></i>
@@ -425,34 +404,32 @@
             </form>
         </div>
 
-        <!-- Подсказки -->
+        <!-- Удаление -->
+        <div class="max-w-[800px] mx-auto mt-3 text-right">
+            <form action="{{ route('applications.destroy', $application) }}" method="POST" class="contents"
+                  onsubmit="return confirm('Удалить заявку «{{ $application->title }}»?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Удалить заявку
+                </button>
+            </form>
+        </div>
+
+        <!-- Мета-информация -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 max-w-[800px] mx-auto">
-            <div class="bg-blue-50 rounded-2xl p-4 border border-blue-100">
-                <div class="flex items-start gap-3">
-                    <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
-                    <div>
-                        <h6 class="font-semibold text-sm text-blue-800">Обязательные поля</h6>
-                        <p class="text-xs text-blue-600">Поля с <span class="text-red-500">*</span> обязательны для заполнения</p>
-                    </div>
-                </div>
+            <div class="meta-card">
+                <i class="fas fa-hashtag"></i>
+                <span>Заявка <strong>#{{ $application->id }}</strong></span>
             </div>
-            <div class="bg-purple-50 rounded-2xl p-4 border border-purple-100">
-                <div class="flex items-start gap-3">
-                    <i class="fas fa-list-check text-purple-500 mt-0.5"></i>
-                    <div>
-                        <h6 class="font-semibold text-sm text-purple-800">Уникальность</h6>
-                        <p class="text-xs text-purple-600">Название заявки должно быть уникальным</p>
-                    </div>
-                </div>
+            <div class="meta-card">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Создана <strong>{{ $application->created_at?->format('d.m.Y H:i') }}</strong></span>
             </div>
-            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100">
-                <div class="flex items-start gap-3">
-                    <i class="fas fa-clock text-amber-500 mt-0.5"></i>
-                    <div>
-                        <h6 class="font-semibold text-sm text-amber-800">История изменений</h6>
-                        <p class="text-xs text-amber-600">Все изменения логируются в системе</p>
-                    </div>
-                </div>
+            <div class="meta-card">
+                <i class="fas fa-sync"></i>
+                <span>Обновлена <strong>{{ $application->updated_at?->format('d.m.Y H:i') }}</strong></span>
             </div>
         </div>
 
@@ -461,41 +438,13 @@
 
 @push('scripts')
     <script>
-        // Счётчик символов для описания
-        const descField = document.getElementById('description');
-        const descCounter = document.getElementById('descCounter');
-
-        function updateCounter() {
-            if (!descField || !descCounter) return;
-            const len = descField.value.length;
-            descCounter.textContent = `${len} / 255`;
-
-            descCounter.classList.remove('warning', 'danger');
-            if (len > 230) {
-                descCounter.classList.add('danger');
-            } else if (len > 200) {
-                descCounter.classList.add('warning');
-            }
+        // Превью статуса
+        function updateStatusPreview(select) {
+            const option = select.options[select.selectedIndex];
+            const preview = document.getElementById('statusPreview');
+            preview.className = 'pill badge-' + option.dataset.color;
+            preview.innerHTML = '<i class="fas ' + option.dataset.icon + '" style="font-size: 10px;"></i><span>' + option.text.trim() + '</span>';
         }
-
-        descField?.addEventListener('input', updateCounter);
-        updateCounter();
-
-        // Подтверждение перед выходом при наличии изменений
-        let formChanged = false;
-        document.querySelectorAll('input, select, textarea').forEach(el => {
-            el.addEventListener('change', () => formChanged = true);
-        });
-
-        window.addEventListener('beforeunload', function(e) {
-            if (formChanged) {
-                e.preventDefault();
-                e.returnValue = 'У вас есть несохраненные изменения. Вы уверены, что хотите покинуть страницу?';
-            }
-        });
-
-        document.querySelector('form')?.addEventListener('submit', function() {
-            formChanged = false;
-        });
+        updateStatusPreview(document.getElementById('status'));
     </script>
 @endpush

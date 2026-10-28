@@ -5,82 +5,78 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Application\ApplicationStoreRequest;
 use App\Http\Requests\Application\ApplicationUpdateRequest;
 use App\Models\Application;
+use App\Models\Department;
+use App\Models\User;
 use App\Repository\Application\ApplicationRepository;
 use App\Services\ApplicationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ApplicationController extends Controller
 {
-    public function __construct(private ApplicationService $appService, private ApplicationRepository $appRepository)
-    {
+    public function __construct(
+        private ApplicationRepository $applicationRepository,
+        private ApplicationService $applicationService
+    ) {}
 
+    public function index(Request $request): View
+    {
+        return view('applications.index', $this->applicationService->getApplicationList($request));
     }
 
-    public function index(): View
-    {
-        return view('applications.index', $this->appService->getApplicationList());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(): View
     {
         return view('applications.create', [
-            'users' => \App\Models\User::query()->orderBy('name')->get(),
+            'departments' => Department::orderBy('title')->get(),
+            'users' => User::query()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(ApplicationStoreRequest $request): RedirectResponse
+    public function store(ApplicationStoreRequest $applicationStoreRequest): RedirectResponse
     {
         return redirect()
-            ->route('applications.edit', $this->appRepository->store($request))
-            ->with('success', 'Application created successfully.');
+            ->route('applications.show', $this->applicationRepository->store($applicationStoreRequest))
+            ->with('success', 'Заявка успешно создана.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-//    public function show(string $id)
-//    {
-//        //
-//    }
+    public function show(Application $application): View
+    {
+        Gate::authorize('view', $application);
+        return view('applications.show', [
+            'application' => $application->load(['user', 'department']),
+        ]);
+    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Application $application): View
     {
+        Gate::authorize('view', $application);
+
         return view('applications.edit', [
             'application' => $application,
-            'users' => \App\Models\User::query()->orderBy('name')->get()]);
+            'departments' => Department::orderBy('title')->get(),
+            'users' => User::query()->orderBy('name')->get(['id', 'name']),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ApplicationUpdateRequest $request, Application $application): RedirectResponse
+    public function update(ApplicationUpdateRequest $applicationUpdateRequest, Application $application): RedirectResponse
     {
+        Gate::authorize('update', $application);
+        $this->applicationRepository->update($applicationUpdateRequest, $application);
+
         return redirect()
-            ->route(
-                'applications.edit',
-                $this->appRepository->update($request, $application))
-            ->with('success', 'Application updated successfully.');
+            ->back()
+            ->with('success', 'Заявка успешно обновлена.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Application $application): RedirectResponse
     {
-        $this->appRepository->destroy($application);
+        Gate::authorize('delete', $application);
+        $this->applicationRepository->destroy($application);
+
         return redirect()
             ->route('applications.index')
-            ->with('success', 'Application deleted successfully.');
+            ->with('success', 'Заявка успешно удалена.');
     }
 }
