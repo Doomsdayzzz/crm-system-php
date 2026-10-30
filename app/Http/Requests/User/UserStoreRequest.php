@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', User::class) ?? false;
     }
 
     public function rules(): array
@@ -25,6 +25,7 @@ class UserStoreRequest extends FormRequest
             'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
         ];
     }
+
     /**
      * Кастомные сообщения об ошибках на русском языке.
      */
@@ -32,28 +33,28 @@ class UserStoreRequest extends FormRequest
     {
         return [
             // Поле password
-            'password.required'  => 'Поле «Пароль» обязательно для заполнения.',
-            'password.string'    => 'Поле «Пароль» должно быть строкой.',
-            'password.min'       => 'Пароль должен содержать не менее :min символов.',
+            'password.required' => 'Поле «Пароль» обязательно для заполнения.',
+            'password.string' => 'Поле «Пароль» должно быть строкой.',
+            'password.min' => 'Пароль должен содержать не менее :min символов.',
             'password.confirmed' => 'Пароли не совпадают.',
 
             // Поле email
             'email.required' => 'Поле «Email» обязательно для заполнения.',
-            'email.string'   => 'Поле «Email» должно быть строкой.',
-            'email.email'    => 'Введите корректный адрес электронной почты.',
-            'email.min'      => 'Email должен содержать не менее :min символов.',
-            'email.max'      => 'Email не должен превышать :max символов.',
-            'email.unique'   => 'Пользователь с таким email уже зарегистрирован.',
+            'email.string' => 'Поле «Email» должно быть строкой.',
+            'email.email' => 'Введите корректный адрес электронной почты.',
+            'email.min' => 'Email должен содержать не менее :min символов.',
+            'email.max' => 'Email не должен превышать :max символов.',
+            'email.unique' => 'Пользователь с таким email уже зарегистрирован.',
 
             // Поле name
             'name.required' => 'Поле «Имя» обязательно для заполнения.',
-            'name.string'   => 'Поле «Имя» должно быть строкой.',
-            'name.max'      => 'Имя не должно превышать :max символов.',
+            'name.string' => 'Поле «Имя» должно быть строкой.',
+            'name.max' => 'Имя не должно превышать :max символов.',
 
             // Поле role
             'role.required' => 'Поле «Роль» обязательно для заполнения.',
-            'role.string'   => 'Поле «Роль» должно быть строкой.',
-            'role.in'       => 'Роль должна быть одной из: :values.',
+            'role.string' => 'Поле «Роль» должно быть строкой.',
+            'role.in' => 'Роль должна быть одной из: :values.',
         ];
     }
 
@@ -64,9 +65,9 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'password' => 'Пароль',
-            'email'    => 'Email',
-            'name'     => 'Имя',
-            'role'     => 'Роль',
+            'email' => 'Email',
+            'name' => 'Имя',
+            'role' => 'Роль',
         ];
     }
 }

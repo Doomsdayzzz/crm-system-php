@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Application;
+use App\Models\Policies\ApplicationPolicy;
+use App\Models\User;
 use App\Observers\ApplicationObserver;
+use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Application::observe(ApplicationObserver::class);
         Gate::policy(Application::class, ApplicationPolicy::class);
-
+        Gate::policy(User::class, UserPolicy::class);
     }
 }

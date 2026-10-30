@@ -13,15 +13,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-
 class UserController extends Controller
 {
     public function __construct(
         private UserRepository $userRepository,
-        private UserService    $userService
-    )
-    {
-
+        private UserService $userService
+    ) {
+        $this->authorizeResource(User::class, 'user');
     }
 
     public function index(Request $request): View
@@ -36,8 +34,7 @@ class UserController extends Controller
 
     public function store(
         UserStoreRequest $userStoreRequest
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
 
         return redirect()
             ->route(
@@ -51,13 +48,14 @@ class UserController extends Controller
     {
         return view('users.edit', [
             'user' => $user->load(['applications', 'images', 'contactTypes']),
-            'contactTypes' => ContactType::all()
+            'contactTypes' => ContactType::all(),
         ]);
     }
 
     public function destroy(User $user): RedirectResponse
     {
         $this->userRepository->destroy($user);
+
         return redirect()
             ->route('users.index')
             ->with('success', 'User destroy successfully.');
@@ -65,10 +63,10 @@ class UserController extends Controller
 
     public function update(
         UserUpdateRequest $userUpdateRequest,
-        User              $user
-    ): RedirectResponse
-    {
+        User $user
+    ): RedirectResponse {
         $this->userRepository->update($userUpdateRequest, $user);
+
         return redirect()
             ->back()
             ->with('success', 'User updated successfully.');

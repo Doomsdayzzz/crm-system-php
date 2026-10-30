@@ -18,8 +18,8 @@ class UserController extends Controller
 {
     public function __construct(
         private UserRepository $userRepository
-    )
-    {
+    ) {
+        $this->authorizeResource(User::class, 'user');
     }
 
     public function index(): UserResourceCollection
@@ -34,12 +34,12 @@ class UserController extends Controller
 
     public function store(
         UserStoreRequest $userStoreRequest
-    ): UserResource|JsonResponse
-    {
+    ): UserResource|JsonResponse {
         DB::beginTransaction();
         try {
             $user = $this->userRepository->store($userStoreRequest);
             DB::commit();
+
             return UserResource::make(
                 $user
             );
@@ -49,19 +49,19 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'message' => $exception->getMessage()
+            'message' => $exception->getMessage(),
         ], $exception->getCode());
     }
 
     public function update(
         UserUpdateRequest $userUpdateRequest,
         User $user
-    ): UserResource|JsonResponse
-    {
+    ): UserResource|JsonResponse {
         DB::beginTransaction();
         try {
             $user = $this->userRepository->update($userUpdateRequest, $user);
             DB::commit();
+
             return UserResource::make(
                 $user
             );
@@ -71,7 +71,7 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'message' => $exception->getMessage()
+            'message' => $exception->getMessage(),
         ], $exception->getCode());
     }
 
@@ -79,7 +79,7 @@ class UserController extends Controller
     {
         return response()->json([
             'message' => 'Пользователь удален!',
-            'status' => $this->userRepository->destroy($user)
+            'status' => $this->userRepository->destroy($user),
         ], 200);
     }
 }
