@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ApplicationObserver
 {
-    private const string CACHE_TAG = 'applications';
+    private const string CACHE_VERSION_KEY = 'applications:version';
 
     public function saved(Application $application): void
     {
@@ -21,6 +21,9 @@ class ApplicationObserver
 
     private function flushCache(): void
     {
-        Cache::tags([self::CACHE_TAG])->flush();
+        Cache::forever(
+            self::CACHE_VERSION_KEY,
+            (int) Cache::get(self::CACHE_VERSION_KEY, 1) + 1
+        );
     }
 }

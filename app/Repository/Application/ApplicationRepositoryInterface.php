@@ -9,8 +9,11 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ApplicationRepositoryInterface
 {
-    public function getApplicationPaginated(): LengthAwarePaginator;
+    public function getApplicationsPaginated(): LengthAwarePaginator;
+
     public function store(ApplicationStoreRequest $applicationStoreRequest): ?Application;
+
     public function update(ApplicationUpdateRequest $applicationUpdateRequest, Application $application): ?Application;
+
     public function destroy(Application $application): ?bool;
 }
