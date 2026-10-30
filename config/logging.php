@@ -65,6 +65,13 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'userController' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/userController.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'replace_placeholders' => true,
+        ],
+
         'test' => [
             'driver' => 'single',
             'path' => storage_path('logs/test.log'),
